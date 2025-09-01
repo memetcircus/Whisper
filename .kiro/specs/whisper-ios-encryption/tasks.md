@@ -16,7 +16,7 @@
   - Add secure random number generation and ephemeral key zeroization
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 7.1_
 
-- [ ] 3. Create envelope processing system
+- [x] 3. Create envelope processing system
   - Implement EnvelopeProcessor with whisper1: format parsing and generation
   - Add canonical context binding with deterministic CBOR/length-prefixed encoding
   - Implement recipient key ID (rkid) generation using BLAKE2s or SHA-256 fallback
