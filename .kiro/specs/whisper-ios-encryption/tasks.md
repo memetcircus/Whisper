@@ -41,7 +41,7 @@
   - Create identity expiration warning UI for approaching key rotation deadlines
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 8.2_
 
-- [ ] 6. Create contact management system
+- [x] 6. Create contact management system
   - Implement Contact model with fingerprint, shortID (Base32), and SAS words
   - Create ContactManager with add, verify, block, and key rotation handling
   - Add trust level management (unverified, verified, revoked) with proper state transitions
