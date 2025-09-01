@@ -25,7 +25,7 @@
   - Add error handling with generic user-facing messages ("Invalid envelope") and detailed errors only in debug builds
   - _Requirements: 2.1, 2.2, 2.3, 2.6, 7.5, 7.3_
 
-- [ ] 4. Implement message padding and length hiding
+- [x] 4. Implement message padding and length hiding
   - Create MessagePadding utility with bucket-based padding (256/512/1024 bytes)
   - Implement padding format: len(2-byte big-endian) | msg | pad(0x00)
   - Add constant-time comparison for padding validation during decryption to prevent timing attacks

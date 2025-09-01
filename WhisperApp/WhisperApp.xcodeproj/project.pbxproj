@@ -15,9 +15,11 @@
 		A1000016294A0000001234567 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000015294A0000001234567 /* KeychainManager.swift */; };
 		A1000018294A0000001234567 /* CryptoEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000017294A0000001234567 /* CryptoEngine.swift */; };
 		A1000026294A0000001234567 /* EnvelopeProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000027294A0000001234567 /* EnvelopeProcessor.swift */; };
+		A100002A294A0000001234567 /* MessagePadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002B294A0000001234567 /* MessagePadding.swift */; };
 		A100000C294A0000001234567 /* NetworkDetectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000B294A0000001234567 /* NetworkDetectionTests.swift */; };
 		A100001A294A0000001234567 /* CryptoEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000019294A0000001234567 /* CryptoEngineTests.swift */; };
 		A1000028294A0000001234567 /* EnvelopeProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000029294A0000001234567 /* EnvelopeProcessorTests.swift */; };
+		A100002C294A0000001234567 /* MessagePaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002D294A0000001234567 /* MessagePaddingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,8 +46,10 @@
 		A1000015294A0000001234567 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		A1000017294A0000001234567 /* CryptoEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoEngine.swift; sourceTree = "<group>"; };
 		A1000027294A0000001234567 /* EnvelopeProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeProcessor.swift; sourceTree = "<group>"; };
+		A100002B294A0000001234567 /* MessagePadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePadding.swift; sourceTree = "<group>"; };
 		A1000019294A0000001234567 /* CryptoEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoEngineTests.swift; sourceTree = "<group>"; };
 		A1000029294A0000001234567 /* EnvelopeProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeProcessorTests.swift; sourceTree = "<group>"; };
+		A100002D294A0000001234567 /* MessagePaddingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePaddingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +119,7 @@
 				A100000B294A0000001234567 /* NetworkDetectionTests.swift */,
 				A1000019294A0000001234567 /* CryptoEngineTests.swift */,
 				A1000029294A0000001234567 /* EnvelopeProcessorTests.swift */,
+				A100002D294A0000001234567 /* MessagePaddingTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -155,6 +160,7 @@
 			children = (
 				A1000017294A0000001234567 /* CryptoEngine.swift */,
 				A1000027294A0000001234567 /* EnvelopeProcessor.swift */,
+				A100002B294A0000001234567 /* MessagePadding.swift */,
 			);
 			path = Crypto;
 			sourceTree = "<group>";
@@ -287,6 +293,7 @@
 				A1000016294A0000001234567 /* KeychainManager.swift in Sources */,
 				A1000018294A0000001234567 /* CryptoEngine.swift in Sources */,
 				A1000026294A0000001234567 /* EnvelopeProcessor.swift in Sources */,
+				A100002A294A0000001234567 /* MessagePadding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +304,7 @@
 				A100000C294A0000001234567 /* NetworkDetectionTests.swift in Sources */,
 				A100001A294A0000001234567 /* CryptoEngineTests.swift in Sources */,
 				A1000028294A0000001234567 /* EnvelopeProcessorTests.swift in Sources */,
+				A100002C294A0000001234567 /* MessagePaddingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
