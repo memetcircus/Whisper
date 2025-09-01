@@ -58,7 +58,7 @@
   - Create policy persistence storage using UserDefaults or Core Data for configuration management
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 8.7_
 
-- [ ] 8. Build biometric authentication system
+- [x] 8. Build biometric authentication system
   - Create BiometricService with enrollSigningKey and sign(data:keyId:) methods (no raw key exposure)
   - Implement Keychain storage with kSecAttrAccessControl requiring biometryCurrentSet
   - Add Face ID/Touch ID authentication flow with proper error handling
