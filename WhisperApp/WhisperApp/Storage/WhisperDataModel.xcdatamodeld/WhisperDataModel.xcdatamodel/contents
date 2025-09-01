@@ -19,6 +19,7 @@
     <entity name="IdentityEntity" representedClassName="IdentityEntity" syncable="YES" codeGenerationType="class">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="ed25519PublicKey" optional="YES" attributeType="Binary"/>
+        <attribute name="expiresAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="fingerprint" optional="YES" attributeType="Binary"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isActive" optional="YES" attributeType="Boolean" defaultValue="NO" usesScalarValueType="YES"/>
