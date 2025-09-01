@@ -50,7 +50,7 @@
   - Implement "Key changed — re-verify" banner display when contact key rotation is detected
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-- [ ] 7. Implement security policy engine
+- [x] 7. Implement security policy engine
   - Create PolicyManager with four configurable policies (contact-required, signature-required, auto-archive, biometric-gated)
   - Add policy validation for send operations with appropriate error throwing
   - Implement Contact-Required-to-Send enforcement where encryptToRawKey throws policyViolation(.rawKeyBlocked)
