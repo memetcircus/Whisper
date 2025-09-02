@@ -114,7 +114,7 @@
   - Add proper error correction level M for QR code generation
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
-- [ ] 15. Create settings and policy UI
+- [x] 15. Create settings and policy UI
   - Build settings screen with toggles for all four security policies
   - Add identity management UI (create, switch, archive, rotate, backup/restore)
   - Implement legal disclaimer screen with required acceptance on first launch
@@ -122,7 +122,7 @@
   - Add export/import functionality for identities and contacts
   - _Requirements: 9.4, 9.5, 3.6, 6.1_
 
-- [ ] 16. Implement comprehensive security testing
+- [-] 16. Implement comprehensive security testing
   - Create unit tests for all cryptographic operations with test vectors
   - Add determinism test verifying same plaintext twice produces different envelopes due to random epk/salt/msgid
   - Implement nonce uniqueness soak test with 1M iterations to detect collisions

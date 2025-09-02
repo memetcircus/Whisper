@@ -3,7 +3,7 @@ import CryptoKit
 
 // MARK: - Contact Model
 
-struct Contact {
+struct Contact: Identifiable {
     let id: UUID
     let displayName: String
     let x25519PublicKey: Data

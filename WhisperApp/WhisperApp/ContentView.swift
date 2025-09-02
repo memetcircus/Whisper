@@ -6,6 +6,9 @@ struct ContentView: View {
     @State private var showingComposeView = false
     @State private var showingDecryptView = false
     @State private var showingContactsView = false
+    @State private var showingSettingsView = false
+    @State private var showingLegalDisclaimer = false
+    @AppStorage("whisper.legal.accepted") private var legalAccepted = false
 
     var body: some View {
         NavigationView {
@@ -45,7 +48,7 @@ struct ContentView: View {
                     .controlSize(.large)
                     
                     Button("Settings") {
-                        // TODO: Navigate to settings view
+                        showingSettingsView = true
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
@@ -65,6 +68,18 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingContactsView) {
             ContactListView()
+        }
+        .sheet(isPresented: $showingSettingsView) {
+            SettingsView()
+        }
+        .sheet(isPresented: $showingLegalDisclaimer) {
+            LegalDisclaimerView(isFirstLaunch: true)
+        }
+        .onAppear {
+            // Show legal disclaimer on first launch
+            if !legalAccepted {
+                showingLegalDisclaimer = true
+            }
         }
     }
 }

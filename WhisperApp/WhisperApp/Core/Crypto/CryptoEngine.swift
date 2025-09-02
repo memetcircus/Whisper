@@ -296,7 +296,7 @@ struct Ed25519KeyPair {
 }
 
 /// Represents a cryptographic identity with key pairs and metadata
-struct Identity {
+struct Identity: Identifiable {
     let id: UUID
     let name: String
     let x25519KeyPair: X25519KeyPair
@@ -305,13 +305,19 @@ struct Identity {
     let createdAt: Date
     let status: IdentityStatus
     let keyVersion: Int
+    
+    /// Short fingerprint for display (Base32 Crockford, 12 chars)
+    var shortFingerprint: String {
+        let base32 = fingerprint.base32CrockfordEncoded()
+        return String(base32.prefix(12))
+    }
 }
 
 /// Status of a cryptographic identity
-enum IdentityStatus {
-    case active
-    case archived
-    case rotated
+enum IdentityStatus: String, CaseIterable {
+    case active = "active"
+    case archived = "archived"
+    case rotated = "rotated"
 }
 
 // MARK: - Error Types
