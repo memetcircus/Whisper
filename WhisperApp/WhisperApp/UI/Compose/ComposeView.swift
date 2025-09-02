@@ -57,6 +57,14 @@ struct ComposeView: View {
                     ShareSheet(items: [encryptedMessage])
                 }
             }
+            .sheet(isPresented: $viewModel.showingQRCode) {
+                if let qrResult = viewModel.qrCodeResult {
+                    QRCodeDisplayView(
+                        qrResult: qrResult,
+                        title: "Encrypted Message"
+                    )
+                }
+            }
         }
     }
     
@@ -206,6 +214,12 @@ struct ComposeView: View {
                 HStack(spacing: 12) {
                     Button("Share") {
                         viewModel.showingShareSheet = true
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    
+                    Button("QR Code") {
+                        viewModel.showQRCode()
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)

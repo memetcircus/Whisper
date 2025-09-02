@@ -106,7 +106,7 @@
   - Implement contact blocking/unblocking functionality
   - _Requirements: 4.3, 4.4, 4.5, 11.1, 11.2_
 
-- [ ] 14. Build QR code integration
+- [x] 14. Build QR code integration
   - Implement QR code generation for public key bundles and encrypted messages
   - Add QR scanning functionality with format validation
   - Enforce QR size warning when envelope exceeds ~900 bytes maximum for reliable scanning

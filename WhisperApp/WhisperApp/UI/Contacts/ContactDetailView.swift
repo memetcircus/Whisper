@@ -75,6 +75,10 @@ struct ContactDetailView: View {
                             showingEditSheet = true
                         }
                         
+                        Button("Share QR Code") {
+                            viewModel.showQRCode()
+                        }
+                        
                         Button("Export Public Key") {
                             exportPublicKey()
                         }
@@ -124,6 +128,14 @@ struct ContactDetailView: View {
                 }
             } message: {
                 Text("Are you sure you want to delete this contact? This action cannot be undone.")
+            }
+            .sheet(isPresented: $viewModel.showingQRCode) {
+                if let qrResult = viewModel.qrCodeResult {
+                    QRCodeDisplayView(
+                        qrResult: qrResult,
+                        title: "Contact QR Code"
+                    )
+                }
             }
         }
     }

@@ -20,6 +20,12 @@
 		A100001A294A0000001234567 /* CryptoEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000019294A0000001234567 /* CryptoEngineTests.swift */; };
 		A1000028294A0000001234567 /* EnvelopeProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000029294A0000001234567 /* EnvelopeProcessorTests.swift */; };
 		A100002C294A0000001234567 /* MessagePaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002D294A0000001234567 /* MessagePaddingTests.swift */; };
+		A100002E294A0000001234567 /* QRCodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100002F294A0000001234567 /* QRCodeService.swift */; };
+		A1000030294A0000001234567 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000031294A0000001234567 /* QRScannerView.swift */; };
+		A1000032294A0000001234567 /* QRCodeDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000033294A0000001234567 /* QRCodeDisplayView.swift */; };
+		A1000034294A0000001234567 /* ContactPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000035294A0000001234567 /* ContactPreviewView.swift */; };
+		A1000036294A0000001234567 /* QRCodeCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000037294A0000001234567 /* QRCodeCoordinatorView.swift */; };
+		A1000038294A0000001234567 /* QRCodeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000039294A0000001234567 /* QRCodeServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,9 +53,15 @@
 		A1000017294A0000001234567 /* CryptoEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoEngine.swift; sourceTree = "<group>"; };
 		A1000027294A0000001234567 /* EnvelopeProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeProcessor.swift; sourceTree = "<group>"; };
 		A100002B294A0000001234567 /* MessagePadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePadding.swift; sourceTree = "<group>"; };
+		A100002F294A0000001234567 /* QRCodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeService.swift; sourceTree = "<group>"; };
+		A1000031294A0000001234567 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		A1000033294A0000001234567 /* QRCodeDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeDisplayView.swift; sourceTree = "<group>"; };
+		A1000035294A0000001234567 /* ContactPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactPreviewView.swift; sourceTree = "<group>"; };
+		A1000037294A0000001234567 /* QRCodeCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinatorView.swift; sourceTree = "<group>"; };
 		A1000019294A0000001234567 /* CryptoEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoEngineTests.swift; sourceTree = "<group>"; };
 		A1000029294A0000001234567 /* EnvelopeProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeProcessorTests.swift; sourceTree = "<group>"; };
 		A100002D294A0000001234567 /* MessagePaddingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePaddingTests.swift; sourceTree = "<group>"; };
+		A1000039294A0000001234567 /* QRCodeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +132,7 @@
 				A1000019294A0000001234567 /* CryptoEngineTests.swift */,
 				A1000029294A0000001234567 /* EnvelopeProcessorTests.swift */,
 				A100002D294A0000001234567 /* MessagePaddingTests.swift */,
+				A1000039294A0000001234567 /* QRCodeServiceTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -136,6 +149,7 @@
 		A1000012294A0000001234567 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A100002F294A0000001234567 /* QRCodeService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -143,8 +157,20 @@
 		A1000013294A0000001234567 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A100003A294A0000001234567 /* QR */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		A100003A294A0000001234567 /* QR */ = {
+			isa = PBXGroup;
+			children = (
+				A1000031294A0000001234567 /* QRScannerView.swift */,
+				A1000033294A0000001234567 /* QRCodeDisplayView.swift */,
+				A1000035294A0000001234567 /* ContactPreviewView.swift */,
+				A1000037294A0000001234567 /* QRCodeCoordinatorView.swift */,
+			);
+			path = QR;
 			sourceTree = "<group>";
 		};
 		A1000014294A0000001234567 /* Storage */ = {
@@ -294,6 +320,11 @@
 				A1000018294A0000001234567 /* CryptoEngine.swift in Sources */,
 				A1000026294A0000001234567 /* EnvelopeProcessor.swift in Sources */,
 				A100002A294A0000001234567 /* MessagePadding.swift in Sources */,
+				A100002E294A0000001234567 /* QRCodeService.swift in Sources */,
+				A1000030294A0000001234567 /* QRScannerView.swift in Sources */,
+				A1000032294A0000001234567 /* QRCodeDisplayView.swift in Sources */,
+				A1000034294A0000001234567 /* ContactPreviewView.swift in Sources */,
+				A1000036294A0000001234567 /* QRCodeCoordinatorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +336,7 @@
 				A100001A294A0000001234567 /* CryptoEngineTests.swift in Sources */,
 				A1000028294A0000001234567 /* EnvelopeProcessorTests.swift in Sources */,
 				A100002C294A0000001234567 /* MessagePaddingTests.swift in Sources */,
+				A1000038294A0000001234567 /* QRCodeServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

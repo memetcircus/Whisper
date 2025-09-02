@@ -151,7 +151,7 @@ struct ManualEntryView: View {
 
 struct QRScannerView: View {
     @ObservedObject var viewModel: AddContactViewModel
-    @State private var showingScanner = false
+    @State private var showingQRCoordinator = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -170,7 +170,7 @@ struct QRScannerView: View {
                 .padding(.horizontal)
             
             Button("Open Camera") {
-                showingScanner = true
+                showingQRCoordinator = true
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
@@ -206,12 +206,20 @@ struct QRScannerView: View {
             Spacer()
         }
         .padding()
-        .sheet(isPresented: $showingScanner) {
-            QRCodeScannerView { result in
-                viewModel.qrCodeData = result
-                viewModel.parseQRData()
-                showingScanner = false
-            }
+        .sheet(isPresented: $showingQRCoordinator) {
+            QRCodeCoordinatorView(
+                onContactAdded: { bundle in
+                    viewModel.loadFromBundle(bundle)
+                    showingQRCoordinator = false
+                },
+                onMessageDecrypted: { _ in
+                    // Not applicable for contact adding
+                    showingQRCoordinator = false
+                },
+                onDismiss: {
+                    showingQRCoordinator = false
+                }
+            )
         }
     }
 }

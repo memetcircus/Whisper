@@ -107,6 +107,19 @@ class AddContactViewModel: ObservableObject {
         }
     }
     
+    func loadFromBundle(_ bundle: PublicKeyBundle) {
+        displayName = bundle.name
+        x25519PublicKeyString = bundle.x25519PublicKey.base64EncodedString()
+        if let ed25519Key = bundle.ed25519PublicKey {
+            ed25519PublicKeyString = ed25519Key.base64EncodedString()
+        } else {
+            ed25519PublicKeyString = ""
+        }
+        note = ""
+        qrCodeData = ""
+        errorMessage = nil
+    }
+    
     func clearForm() {
         displayName = ""
         x25519PublicKeyString = ""

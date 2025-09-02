@@ -68,7 +68,10 @@ class ComposeViewModel: ObservableObject {
     @Published var showingContactPicker: Bool = false
     @Published var showingError: Bool = false
     @Published var showingBiometricPrompt: Bool = false
+    @Published var showingQRCode: Bool = false
+    @Published var showingShareSheet: Bool = false
     @Published var errorMessage: String = ""
+    @Published var qrCodeResult: QRCodeResult?
     
     // MARK: - Dependencies
     
@@ -76,6 +79,7 @@ class ComposeViewModel: ObservableObject {
     private let identityManager: IdentityManager
     private let contactManager: ContactManager
     private let policyManager: PolicyManager
+    private let qrCodeService: QRCodeService
     
     // MARK: - Computed Properties
     
@@ -99,12 +103,14 @@ class ComposeViewModel: ObservableObject {
     init(whisperService: WhisperService = ServiceContainer.shared.whisperService,
          identityManager: IdentityManager = ServiceContainer.shared.identityManager,
          contactManager: ContactManager = ServiceContainer.shared.contactManager,
-         policyManager: PolicyManager = ServiceContainer.shared.policyManager) {
+         policyManager: PolicyManager = ServiceContainer.shared.policyManager,
+         qrCodeService: QRCodeService = QRCodeService()) {
         
         self.whisperService = whisperService
         self.identityManager = identityManager
         self.contactManager = contactManager
         self.policyManager = policyManager
+        self.qrCodeService = qrCodeService
         
         loadActiveIdentity()
         updateSignatureRequirement()
@@ -179,6 +185,18 @@ class ComposeViewModel: ObservableObject {
     func showRawKeyInput() {
         // TODO: Implement raw key input dialog
         // This would show a text field for entering a raw X25519 public key
+    }
+    
+    func showQRCode() {
+        guard let envelope = encryptedMessage else { return }
+        
+        do {
+            let result = try qrCodeService.generateQRCode(for: envelope)
+            qrCodeResult = result
+            showingQRCode = true
+        } catch {
+            showError("Failed to generate QR code: \(error.localizedDescription)")
+        }
     }
     
     func cancelBiometricAuth() {
