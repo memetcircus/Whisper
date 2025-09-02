@@ -5,6 +5,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var showingComposeView = false
     @State private var showingDecryptView = false
+    @State private var showingContactsView = false
 
     var body: some View {
         NavigationView {
@@ -38,7 +39,7 @@ struct ContentView: View {
                     .controlSize(.large)
                     
                     Button("Manage Contacts") {
-                        // TODO: Navigate to contacts view
+                        showingContactsView = true
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
@@ -61,6 +62,9 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingDecryptView) {
             DecryptView()
+        }
+        .sheet(isPresented: $showingContactsView) {
+            ContactListView()
         }
     }
 }

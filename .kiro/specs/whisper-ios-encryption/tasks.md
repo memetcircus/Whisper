@@ -98,7 +98,7 @@
   - Add error handling for invalid envelopes and policy violations
   - _Requirements: 9.1, 9.3, 7.2, 7.3_
 
-- [ ] 13. Create contact management UI
+- [x] 13. Create contact management UI
   - Build contact list with trust badges (Verified, Unverified, Revoked, Blocked)
   - Implement add contact flow with QR scanning and manual entry
   - Create contact verification UI with fingerprint, shortID, and SAS word display
