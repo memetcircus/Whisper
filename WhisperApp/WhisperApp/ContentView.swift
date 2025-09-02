@@ -4,6 +4,7 @@ import CoreData
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var showingComposeView = false
+    @State private var showingDecryptView = false
 
     var body: some View {
         NavigationView {
@@ -31,7 +32,7 @@ struct ContentView: View {
                     .controlSize(.large)
                     
                     Button("Decrypt Message") {
-                        // TODO: Navigate to decrypt view
+                        showingDecryptView = true
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
@@ -54,8 +55,12 @@ struct ContentView: View {
             }
             .navigationTitle("Whisper")
         }
+        .clipboardBanner() // Add clipboard detection banner
         .sheet(isPresented: $showingComposeView) {
             ComposeView()
+        }
+        .sheet(isPresented: $showingDecryptView) {
+            DecryptView()
         }
     }
 }

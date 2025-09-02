@@ -90,7 +90,7 @@
   - Create clipboard copy functionality with user feedback
   - _Requirements: 9.2, 5.1, 6.2, 11.1_
 
-- [ ] 12. Build message decryption UI
+- [x] 12. Build message decryption UI
   - Create decrypt banner that detects whisper1: prefixes in clipboard/share
   - Implement decryption flow with sender attribution display
   - Add replay detection and freshness validation with appropriate error messages
