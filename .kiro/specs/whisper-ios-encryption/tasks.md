@@ -74,7 +74,7 @@
   - Add Core Data integration for persistent replay protection storage
   - _Requirements: 7.2, 7.3, 7.4_
 
-- [ ] 10. Build high-level encryption service
+- [x] 10. Build high-level encryption service
   - Create WhisperService with encrypt/decrypt methods and contact/raw key support
   - Implement signature attribution logic: Verified contacts show "From: Name (Verified, Signed)", Unverified show "From: Name (Unverified, Signed)", Unknown signers show "From: Unknown (Signed)"
   - Add "not-for-me" detection when rkid doesn't match any identity
