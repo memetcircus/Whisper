@@ -3,6 +3,7 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var showingComposeView = false
 
     var body: some View {
         NavigationView {
@@ -24,7 +25,7 @@ struct ContentView: View {
                 
                 VStack(spacing: 16) {
                     Button("Compose Message") {
-                        // TODO: Navigate to compose view
+                        showingComposeView = true
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
@@ -52,7 +53,9 @@ struct ContentView: View {
                 Spacer()
             }
             .navigationTitle("Whisper")
-            .navigationBarTitleDisplayMode(.inline)
+        }
+        .sheet(isPresented: $showingComposeView) {
+            ComposeView()
         }
     }
 }
