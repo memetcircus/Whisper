@@ -122,7 +122,7 @@
   - Add export/import functionality for identities and contacts
   - _Requirements: 9.4, 9.5, 3.6, 6.1_
 
-- [-] 16. Implement comprehensive security testing
+- [x] 16. Implement comprehensive security testing
   - Create unit tests for all cryptographic operations with test vectors
   - Add determinism test verifying same plaintext twice produces different envelopes due to random epk/salt/msgid
   - Implement nonce uniqueness soak test with 1M iterations to detect collisions
