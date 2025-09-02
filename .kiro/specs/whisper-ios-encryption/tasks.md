@@ -66,7 +66,7 @@
   - Add graceful cancellation handling that returns policyViolation(.biometricRequired) when user cancels
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 8.3_
 
-- [ ] 9. Create replay protection system
+- [x] 9. Create replay protection system
   - Implement ReplayProtector with atomic checkAndCommit operation that verifies uniqueness and commits in one step
   - Add freshness window validation (±48 hours) with timestamp checking
   - Create replay cache with 30-day retention and 10,000 entry limit
