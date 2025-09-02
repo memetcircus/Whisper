@@ -130,7 +130,7 @@
   - Add algorithm lock tests ensuring only v1.c20p is accepted
   - _Requirements: 12.3, 12.4, 12.5, 12.6_
 
-- [ ] 17. Build integration and end-to-end tests
+- [x] 17. Build integration and end-to-end tests
   - Create full encrypt/decrypt cycle tests with multiple identities
   - Add cross-identity communication tests
   - Implement policy matrix tests covering all 16 combinations of 4 policies (contact-required × signature-required × auto-archive × biometric-gated)
