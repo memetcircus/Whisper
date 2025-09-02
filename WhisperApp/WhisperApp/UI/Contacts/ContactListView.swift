@@ -16,7 +16,7 @@ struct ContactListView: View {
         NavigationView {
             VStack(spacing: 0) {
                 // Search bar
-                SearchBar(text: $searchText, placeholder: "Search contacts...")
+                SearchBar(text: $searchText, placeholder: LocalizationHelper.Contact.searchPlaceholder)
                     .padding(.horizontal)
                     .padding(.top, 8)
                 
@@ -28,23 +28,26 @@ struct ContactListView: View {
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             // Block/Unblock action
-                            Button(contact.isBlocked ? "Unblock" : "Block") {
+                            Button(contact.isBlocked ? LocalizationHelper.Contact.unblockTitle : LocalizationHelper.Contact.blockTitle) {
                                 toggleBlockStatus(for: contact)
                             }
                             .tint(contact.isBlocked ? .green : .red)
+                            .accessibilityLabel(contact.isBlocked ? "Unblock \(contact.displayName)" : "Block \(contact.displayName)")
                             
                             // Delete action
-                            Button("Delete", role: .destructive) {
+                            Button(LocalizationHelper.delete, role: .destructive) {
                                 deleteContact(contact)
                             }
+                            .accessibilityLabel("Delete \(contact.displayName)")
                         }
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
                             // Verify action
                             if contact.trustLevel != .verified {
-                                Button("Verify") {
+                                Button(LocalizationHelper.Contact.verifyTitle) {
                                     showingContactDetail = contact
                                 }
                                 .tint(.blue)
+                                .accessibilityLabel("Verify \(contact.displayName)")
                             }
                         }
                     }
@@ -54,27 +57,31 @@ struct ContactListView: View {
                     await viewModel.refreshContacts()
                 }
             }
-            .navigationTitle("Contacts")
+            .navigationTitle(LocalizationHelper.Contact.title)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingAddContact = true }) {
                         Image(systemName: "plus")
                     }
+                    .accessibilityLabel(LocalizationHelper.Contact.addTitle)
+                    .accessibilityHint("Double tap to add a new contact")
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
-                        Button("Export Keybook") {
+                        Button(LocalizationHelper.Contact.exportKeybook) {
                             exportKeybook()
                         }
                         
-                        Button("Import Contacts") {
+                        Button(LocalizationHelper.Contact.importContacts) {
                             // TODO: Implement import functionality
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
                     }
+                    .accessibilityLabel("Contact options menu")
+                    .accessibilityHint("Double tap to open contact management options")
                 }
             }
             .keyRotationWarning(
@@ -179,7 +186,7 @@ struct ContactRowView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text(contact.displayName)
-                            .font(.headline)
+                            .font(.scaledHeadline)
                             .foregroundColor(.primary)
                         
                         Spacer()
@@ -190,24 +197,25 @@ struct ContactRowView: View {
                     
                     HStack {
                         Text("ID: \(contact.shortFingerprint)")
-                            .font(.caption)
+                            .font(.scaledCaption)
                             .foregroundColor(.secondary)
                         
                         Spacer()
                         
                         if contact.isBlocked {
-                            Text("Blocked")
-                                .font(.caption)
+                            Text(LocalizationHelper.Contact.blockedBadge)
+                                .font(.scaledCaption)
                                 .foregroundColor(.red)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
                                 .background(Color.red.opacity(0.1))
                                 .cornerRadius(4)
+                                .accessibilityLabel(LocalizationHelper.Accessibility.trustBadgeBlocked())
                         }
                         
                         if let lastSeen = contact.lastSeenAt {
-                            Text("Last seen: \(lastSeen, style: .relative)")
-                                .font(.caption2)
+                            Text("\(LocalizationHelper.Contact.lastSeen): \(lastSeen, style: .relative)")
+                                .font(.scaledCaption2)
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -216,6 +224,8 @@ struct ContactRowView: View {
             .padding(.vertical, 4)
         }
         .buttonStyle(PlainButtonStyle())
+        .contactRowAccessibility(for: contact)
+        .dynamicTypeSupport(.body)
     }
 }
 
@@ -228,16 +238,19 @@ struct ContactAvatarView: View {
         ZStack {
             Circle()
                 .fill(avatarColor)
-                .frame(width: 40, height: 40)
+                .frame(width: AccessibilityConstants.minimumTouchTarget, 
+                       height: AccessibilityConstants.minimumTouchTarget)
             
             Text(initials)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.white)
         }
+        .accessibilityLabel(LocalizationHelper.Accessibility.contactAvatar(contact.displayName))
+        .accessibilityAddTraits(.isImage)
     }
     
     private var initials: String {
-        let components = contact.displayName.components(separatedBy: .whitespaces)
+        let components = contact.displayName.components(separatedBy: CharacterSet.whitespaces)
         let firstInitial = components.first?.first?.uppercased() ?? ""
         let lastInitial = components.count > 1 ? components.last?.first?.uppercased() ?? "" : ""
         return firstInitial + lastInitial
@@ -259,10 +272,10 @@ struct TrustBadgeView: View {
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: iconName)
-                .font(.caption2)
+                .font(.scaledCaption2)
             
             Text(trustLevel.displayName)
-                .font(.caption2)
+                .font(.scaledCaption2)
                 .fontWeight(.medium)
         }
         .foregroundColor(textColor)
@@ -270,6 +283,8 @@ struct TrustBadgeView: View {
         .padding(.vertical, 2)
         .background(backgroundColor)
         .cornerRadius(8)
+        .trustBadgeAccessibility(for: trustLevel)
+        .dynamicTypeSupport(.caption2)
     }
     
     private var iconName: String {
@@ -316,20 +331,26 @@ struct SearchBar: View {
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.secondary)
+                .accessibilityHidden(true)
             
             TextField(placeholder, text: $text)
                 .textFieldStyle(PlainTextFieldStyle())
+                .accessibilityLabel("Search contacts")
+                .accessibilityHint("Enter text to search for contacts")
+                .dynamicTypeSupport(.body)
             
             if !text.isEmpty {
                 Button(action: { text = "" }) {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(.secondary)
                 }
+                .accessibilityLabel("Clear search")
+                .accessibilityHint("Double tap to clear search text")
             }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color(.systemGray6))
+        .background(Color.accessibleSecondaryBackground)
         .cornerRadius(10)
     }
 }

@@ -98,11 +98,11 @@ enum TrustLevel: String, CaseIterable {
     var displayName: String {
         switch self {
         case .unverified:
-            return "Unverified"
+            return LocalizationHelper.Contact.unverifiedBadge
         case .verified:
-            return "Verified"
+            return LocalizationHelper.Contact.verifiedBadge
         case .revoked:
-            return "Revoked"
+            return LocalizationHelper.Contact.revokedBadge
         }
     }
     
@@ -114,6 +114,17 @@ enum TrustLevel: String, CaseIterable {
             return "green"
         case .revoked:
             return "red"
+        }
+    }
+    
+    var accessibilityLabel: String {
+        switch self {
+        case .unverified:
+            return LocalizationHelper.Accessibility.trustBadgeUnverified()
+        case .verified:
+            return LocalizationHelper.Accessibility.trustBadgeVerified()
+        case .revoked:
+            return LocalizationHelper.Accessibility.trustBadgeRevoked()
         }
     }
 }

@@ -28,26 +28,28 @@ struct ComposeView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Compose Message")
+            .navigationTitle(LocalizationHelper.Encrypt.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(LocalizationHelper.cancel) {
                         dismiss()
                     }
+                    .accessibilityLabel("Cancel compose")
+                    .accessibilityHint("Double tap to cancel message composition")
                 }
             }
-            .alert("Error", isPresented: $viewModel.showingError) {
-                Button("OK") { }
+            .alert(LocalizationHelper.Error.generic, isPresented: $viewModel.showingError) {
+                Button(LocalizationHelper.ok) { }
             } message: {
                 Text(viewModel.errorMessage)
             }
-            .alert("Biometric Authentication", isPresented: $viewModel.showingBiometricPrompt) {
-                Button("Cancel") {
+            .alert(LocalizationHelper.Sign.bioPrepTitle, isPresented: $viewModel.showingBiometricPrompt) {
+                Button(LocalizationHelper.cancel) {
                     viewModel.cancelBiometricAuth()
                 }
             } message: {
-                Text("Touch ID or Face ID is required to sign this message.")
+                Text(LocalizationHelper.Sign.bioPrepBody)
             }
             .sheet(isPresented: $viewModel.showingContactPicker) {
                 ContactPickerView(selectedContact: $viewModel.selectedContact)
@@ -72,128 +74,146 @@ struct ComposeView: View {
     
     private var identitySelectionSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("From Identity")
-                .font(.headline)
+            Text(LocalizationHelper.Encrypt.fromIdentity)
+                .font(.scaledHeadline)
             
             if let activeIdentity = viewModel.activeIdentity {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(activeIdentity.name)
-                            .font(.body)
+                            .font(.scaledBody)
                             .fontWeight(.medium)
                         
-                        Text("Active Identity")
-                            .font(.caption)
+                        Text(LocalizationHelper.Identity.active)
+                            .font(.scaledCaption)
                             .foregroundColor(.secondary)
                     }
                     
                     Spacer()
                     
-                    Button("Change") {
+                    Button(LocalizationHelper.Encrypt.change) {
                         viewModel.showIdentityPicker()
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
+                    .accessibilityLabel("Change sender identity")
+                    .accessibilityHint("Double tap to select a different identity")
                 }
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.accessibleSecondaryBackground)
                 .cornerRadius(8)
             } else {
                 Text("No active identity")
                     .foregroundColor(.secondary)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.accessibleSecondaryBackground)
                     .cornerRadius(8)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(LocalizationHelper.Accessibility.identitySelector)
     }
     
     private var recipientSelectionSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("To")
-                .font(.headline)
+            Text(LocalizationHelper.Encrypt.to)
+                .font(.scaledHeadline)
             
             HStack {
                 if let selectedContact = viewModel.selectedContact {
                     VStack(alignment: .leading) {
                         Text(selectedContact.displayName)
-                            .font(.body)
+                            .font(.scaledBody)
                             .fontWeight(.medium)
                         
                         HStack {
                             Text(selectedContact.trustLevel.displayName)
-                                .font(.caption)
+                                .font(.scaledCaption)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 2)
-                                .background(Color(selectedContact.trustLevel.badgeColor))
+                                .background(Color.trustLevelColor(for: selectedContact.trustLevel))
                                 .foregroundColor(.white)
                                 .cornerRadius(4)
                             
                             Text(selectedContact.shortFingerprint)
-                                .font(.caption)
+                                .font(.scaledCaption)
                                 .foregroundColor(.secondary)
                         }
                     }
                     
                     Spacer()
                     
-                    Button("Change") {
+                    Button(LocalizationHelper.Encrypt.change) {
                         viewModel.showingContactPicker = true
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
+                    .accessibilityLabel("Change recipient")
+                    .accessibilityHint("Double tap to select a different recipient")
                 } else {
                     VStack(alignment: .leading, spacing: 8) {
-                        Button("Select Contact") {
+                        Button(LocalizationHelper.Encrypt.selectContact) {
                             viewModel.showingContactPicker = true
                         }
                         .buttonStyle(.bordered)
+                        .accessibilityLabel("Select contact recipient")
+                        .accessibilityHint("Double tap to choose a contact from your list")
                         
                         if !viewModel.isContactRequired {
-                            Button("Use Raw Key") {
+                            Button(LocalizationHelper.Encrypt.useRawKey) {
                                 viewModel.showRawKeyInput()
                             }
                             .buttonStyle(.plain)
-                            .font(.caption)
+                            .font(.scaledCaption)
                             .foregroundColor(.secondary)
+                            .accessibilityLabel("Use raw public key")
+                            .accessibilityHint("Double tap to enter a raw public key instead")
                         }
                     }
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.accessibleSecondaryBackground)
             .cornerRadius(8)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(LocalizationHelper.Accessibility.contactSelector)
     }
     
     private var messageInputSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Message")
-                .font(.headline)
+            Text(LocalizationHelper.Encrypt.message)
+                .font(.scaledHeadline)
             
             TextEditor(text: $viewModel.messageText)
                 .frame(minHeight: 120)
                 .padding(8)
-                .background(Color(.systemGray6))
+                .background(Color.accessibleSecondaryBackground)
                 .cornerRadius(8)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(Color(.systemGray4), lineWidth: 1)
                 )
+                .accessibilityLabel(LocalizationHelper.Accessibility.messageInput)
+                .accessibilityHint("Enter the message you want to encrypt")
+                .dynamicTypeSupport(.body)
         }
     }
     
     private var optionsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Options")
-                .font(.headline)
+            Text(LocalizationHelper.Encrypt.options)
+                .font(.scaledHeadline)
             
-            Toggle("Include Signature", isOn: $viewModel.includeSignature)
+            Toggle(LocalizationHelper.Encrypt.includeSignature, isOn: $viewModel.includeSignature)
                 .disabled(viewModel.isSignatureRequired)
+                .accessibilityLabel("Include digital signature")
+                .accessibilityHint(viewModel.isSignatureRequired ? "Signature is required by policy" : "Toggle to include or exclude digital signature")
+                .dynamicTypeSupport(.body)
             
             if viewModel.isSignatureRequired {
-                Text("Signature required by policy for verified contacts")
-                    .font(.caption)
+                Text(LocalizationHelper.Encrypt.signatureRequiredNote)
+                    .font(.scaledCaption)
                     .foregroundColor(.secondary)
             }
         }
@@ -201,7 +221,7 @@ struct ComposeView: View {
     
     private var actionButtonsSection: some View {
         VStack(spacing: 12) {
-            Button("Encrypt Message") {
+            Button(LocalizationHelper.Encrypt.encryptMessage) {
                 Task {
                     await viewModel.encryptMessage()
                 }
@@ -209,27 +229,41 @@ struct ComposeView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .disabled(!viewModel.canEncrypt)
+            .frame(minHeight: AccessibilityConstants.minimumTouchTarget)
+            .accessibilityLabel(LocalizationHelper.Accessibility.encryptButton)
+            .accessibilityHint(LocalizationHelper.Accessibility.hintEncryptButton)
+            .dynamicTypeSupport(.body)
             
             if viewModel.encryptedMessage != nil {
                 HStack(spacing: 12) {
-                    Button("Share") {
+                    Button(LocalizationHelper.Encrypt.share) {
                         viewModel.showingShareSheet = true
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
+                    .frame(minHeight: AccessibilityConstants.minimumTouchTarget)
+                    .accessibilityLabel("Share encrypted message")
+                    .accessibilityHint("Double tap to share the encrypted message")
                     
-                    Button("QR Code") {
+                    Button(LocalizationHelper.Encrypt.qrCode) {
                         viewModel.showQRCode()
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
+                    .frame(minHeight: AccessibilityConstants.minimumTouchTarget)
+                    .accessibilityLabel("Show QR code")
+                    .accessibilityHint("Double tap to display message as QR code")
                     
-                    Button("Copy") {
+                    Button(LocalizationHelper.Encrypt.copy) {
                         viewModel.copyToClipboard()
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
+                    .frame(minHeight: AccessibilityConstants.minimumTouchTarget)
+                    .accessibilityLabel("Copy to clipboard")
+                    .accessibilityHint("Double tap to copy encrypted message to clipboard")
                 }
+                .dynamicTypeSupport(.body)
             }
         }
     }

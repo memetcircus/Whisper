@@ -1,0 +1,211 @@
+/* 
+   Localizable.strings
+   WhisperApp
+   
+   Whisper iOS Encryption App Localization
+*/
+
+// MARK: - General
+"app.name" = "Whisper";
+"cancel" = "Cancel";
+"ok" = "OK";
+"done" = "Done";
+"save" = "Save";
+"delete" = "Delete";
+"edit" = "Edit";
+"add" = "Add";
+"remove" = "Remove";
+"retry" = "Retry";
+"close" = "Close";
+"continue" = "Continue";
+"back" = "Back";
+"next" = "Next";
+"yes" = "Yes";
+"no" = "No";
+
+// MARK: - Sign/Biometric Authentication
+"sign.bio_prep.title" = "Biometric Authentication Required";
+"sign.bio_prep.body" = "Touch ID or Face ID is required to sign this message for enhanced security.";
+"sign.bio_required.title" = "Authentication Required";
+"sign.bio_required.message" = "Please authenticate to sign this message";
+"sign.bio_cancelled.title" = "Authentication Cancelled";
+"sign.bio_cancelled.message" = "Message signing was cancelled";
+"sign.bio_failed.title" = "Authentication Failed";
+"sign.bio_failed.message" = "Biometric authentication failed. Please try again.";
+"sign.bio_unavailable.title" = "Biometric Authentication Unavailable";
+"sign.bio_unavailable.message" = "Touch ID or Face ID is not available on this device";
+
+// MARK: - Policy Messages
+"policy.contact_required.title" = "Contact Required";
+"policy.contact_required.message" = "You must select a contact to send encrypted messages. Raw key encryption is disabled by policy.";
+"policy.signature_required.title" = "Signature Required";
+"policy.signature_required.message" = "Signature is required by policy for verified contacts";
+"policy.biometric_required.title" = "Biometric Authentication Required";
+"policy.biometric_required.message" = "Biometric authentication is required by policy for signing operations";
+"policy.auto_archive.description" = "Automatically archive old identities after key rotation";
+
+// MARK: - Contact Management
+"contact.title" = "Contacts";
+"contact.verified.badge" = "Verified";
+"contact.unverified.badge" = "Unverified";
+"contact.revoked.badge" = "Revoked";
+"contact.blocked.badge" = "Blocked";
+"contact.add.title" = "Add Contact";
+"contact.edit.title" = "Edit Contact";
+"contact.delete.title" = "Delete Contact";
+"contact.delete.message" = "Are you sure you want to delete this contact? This action cannot be undone.";
+"contact.block.title" = "Block Contact";
+"contact.block.message" = "Are you sure you want to block this contact?";
+"contact.unblock.title" = "Unblock Contact";
+"contact.verify.title" = "Verify Contact";
+"contact.verify.message" = "Please verify the contact's identity using the fingerprint or SAS words";
+"contact.key_rotation.title" = "Key Changed";
+"contact.key_rotation.message" = "This contact's key has changed. Please re-verify their identity.";
+"contact.search.placeholder" = "Search contacts...";
+"contact.export_keybook" = "Export Keybook";
+"contact.import" = "Import Contacts";
+"contact.fingerprint" = "Fingerprint";
+"contact.short_id" = "Short ID";
+"contact.sas_words" = "SAS Words";
+"contact.trust_level" = "Trust Level";
+"contact.last_seen" = "Last seen";
+"contact.never_seen" = "Never seen";
+
+// MARK: - Identity Management
+"identity.active" = "Active Identity";
+"identity.archived" = "Archived";
+"identity.create.title" = "Create Identity";
+"identity.create.name.placeholder" = "Identity name";
+"identity.switch.title" = "Switch Identity";
+"identity.archive.title" = "Archive Identity";
+"identity.archive.message" = "Are you sure you want to archive this identity? It will become decrypt-only.";
+"identity.rotate.title" = "Rotate Keys";
+"identity.rotate.message" = "This will create a new identity and optionally archive the current one";
+"identity.export.title" = "Export Identity";
+"identity.import.title" = "Import Identity";
+"identity.backup.title" = "Backup Identity";
+"identity.restore.title" = "Restore Identity";
+"identity.expiration.warning" = "Your identity will expire soon. Consider rotating your keys.";
+
+// MARK: - Encryption/Compose
+"encrypt.title" = "Compose Message";
+"encrypt.from_identity" = "From Identity";
+"encrypt.to" = "To";
+"encrypt.message" = "Message";
+"encrypt.options" = "Options";
+"encrypt.include_signature" = "Include Signature";
+"encrypt.signature_required_note" = "Signature required by policy for verified contacts";
+"encrypt.select_contact" = "Select Contact";
+"encrypt.use_raw_key" = "Use Raw Key";
+"encrypt.change" = "Change";
+"encrypt.encrypt_message" = "Encrypt Message";
+"encrypt.share" = "Share";
+"encrypt.qr_code" = "QR Code";
+"encrypt.copy" = "Copy";
+"encrypt.success.title" = "Message Encrypted";
+"encrypt.success.message" = "Your message has been encrypted successfully";
+"encrypt.error.no_identity" = "No active identity selected";
+"encrypt.error.no_recipient" = "No recipient selected";
+"encrypt.error.empty_message" = "Message cannot be empty";
+
+// MARK: - Decryption
+"decrypt.title" = "Decrypt Message";
+"decrypt.banner.title" = "Encrypted Message Detected";
+"decrypt.banner.message" = "Found whisper1: message in clipboard";
+"decrypt.banner.decrypt" = "Decrypt";
+"decrypt.input.title" = "Encrypted Message";
+"decrypt.input.placeholder" = "Paste encrypted message here...";
+"decrypt.invalid_format" = "Invalid whisper message format";
+"decrypt.decrypt_message" = "Decrypt Message";
+"decrypt.decrypted_message" = "Decrypted Message";
+"decrypt.sender" = "Sender";
+"decrypt.content" = "Content";
+"decrypt.message_details" = "Message Details";
+"decrypt.received" = "Received:";
+"decrypt.security" = "Security:";
+"decrypt.end_to_end_encrypted" = "End-to-End Encrypted";
+"decrypt.copy_message" = "Copy Message";
+"decrypt.clear" = "Clear";
+"decrypt.success.title" = "Message Decrypted";
+"decrypt.success.message" = "Message decrypted successfully";
+"decrypt.error.invalid_envelope" = "Invalid envelope";
+"decrypt.error.replay_detected" = "Replay detected";
+"decrypt.error.message_expired" = "Message expired";
+"decrypt.error.not_for_me" = "This message is not addressed to you";
+
+// MARK: - QR Code
+"qr.title" = "QR Code";
+"qr.scan.title" = "Scan QR Code";
+"qr.display.title" = "QR Code";
+"qr.contact.title" = "Contact QR Code";
+"qr.message.title" = "Encrypted Message";
+"qr.size_warning.title" = "QR Code Size Warning";
+"qr.size_warning.message" = "This message is large and may be difficult to scan. Consider shortening it.";
+"qr.scan.invalid" = "Invalid QR code format";
+"qr.scan.success" = "QR code scanned successfully";
+"qr.generate.error" = "Failed to generate QR code";
+
+// MARK: - Settings
+"settings.title" = "Settings";
+"settings.security_policies" = "Security Policies";
+"settings.contact_required" = "Require Contact Selection";
+"settings.signature_required" = "Require Signature for Verified";
+"settings.auto_archive" = "Auto-Archive on Rotation";
+"settings.biometric_gated" = "Biometric-Gated Signing";
+"settings.identity_management" = "Identity Management";
+"settings.biometric_settings" = "Biometric Settings";
+"settings.export_import" = "Export & Import";
+"settings.backup_restore" = "Backup & Restore";
+"settings.legal" = "Legal";
+
+// MARK: - Legal
+"legal.title" = "Legal Disclaimer";
+"legal.accept" = "Accept";
+"legal.decline" = "Decline";
+"legal.required" = "You must accept the legal disclaimer to use this app";
+"legal.content" = "This application provides cryptographic functionality for educational and research purposes. Users are responsible for compliance with applicable laws and regulations. The developers make no warranties regarding the security or reliability of this software.";
+
+// MARK: - Errors
+"error.generic" = "An error occurred";
+"error.cryptographic_failure" = "Cryptographic operation failed";
+"error.key_not_found" = "Key not found";
+"error.contact_not_found" = "Contact not found";
+"error.invalid_padding" = "Invalid message padding";
+"error.networking_detected" = "Networking code detected - security violation";
+
+// MARK: - Accessibility Labels
+"accessibility.trust_badge.verified" = "Verified contact - identity confirmed";
+"accessibility.trust_badge.unverified" = "Unverified contact - identity not confirmed";
+"accessibility.trust_badge.revoked" = "Revoked contact - identity compromised";
+"accessibility.trust_badge.blocked" = "Blocked contact - messages disabled";
+"accessibility.contact_avatar" = "Contact avatar for %@";
+"accessibility.identity_selector" = "Select active identity";
+"accessibility.contact_selector" = "Select message recipient";
+"accessibility.encrypt_button" = "Encrypt message with current settings";
+"accessibility.decrypt_button" = "Decrypt the entered message";
+"accessibility.qr_scanner" = "QR code scanner camera view";
+"accessibility.qr_display" = "QR code display for sharing";
+"accessibility.biometric_prompt" = "Biometric authentication required";
+"accessibility.policy_toggle" = "Toggle %@ security policy";
+"accessibility.message_input" = "Enter message to encrypt";
+"accessibility.encrypted_input" = "Enter encrypted message to decrypt";
+
+// MARK: - Accessibility Hints
+"accessibility.hint.trust_badge" = "Double tap to view contact details";
+"accessibility.hint.contact_row" = "Double tap to select this contact";
+"accessibility.hint.encrypt_button" = "Double tap to encrypt the message";
+"accessibility.hint.decrypt_button" = "Double tap to decrypt the message";
+"accessibility.hint.qr_scan" = "Point camera at QR code to scan";
+"accessibility.hint.policy_toggle" = "Double tap to toggle this security policy";
+
+// MARK: - Attribution Messages
+"attribution.signed_verified" = "From: %@ (Verified, Signed)";
+"attribution.signed_unverified" = "From: %@ (Unverified, Signed)";
+"attribution.signed_unknown" = "From: Unknown (Signed)";
+"attribution.unsigned" = "From: %@";
+"attribution.invalid_signature" = "From: Unknown (Invalid Signature)";
+"attribution.description.verified" = "Identity verified and message signed";
+"attribution.description.unverified" = "Message signed but identity not verified";
+"attribution.description.unknown" = "Message signed by unknown sender";
+"attribution.description.unsigned" = "Message not signed";
+"attribution.description.invalid" = "Invalid or corrupted signature";

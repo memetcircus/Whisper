@@ -138,7 +138,7 @@
   - Add replay protection and freshness validation tests
   - _Requirements: 7.2, 5.5, 6.4, 12.6_
 
-- [ ] 18. Implement accessibility and localization
+- [x] 18. Implement accessibility and localization
   - Add VoiceOver labels and hints for all UI elements including trust badges with accessible text alternatives
   - Implement Dynamic Type support for text scaling
   - Create localization files with all required string keys (sign.*, policy.*, contact.*, identity.*, encrypt.*, decrypt.*, qr.*, legal.*)

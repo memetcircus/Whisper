@@ -29,13 +29,15 @@ struct DecryptView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Decrypt Message")
+            .navigationTitle(LocalizationHelper.Decrypt.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(LocalizationHelper.cancel) {
                         dismiss()
                     }
+                    .accessibilityLabel("Cancel decrypt")
+                    .accessibilityHint("Double tap to cancel message decryption")
                 }
             }
             .decryptErrorAlert(error: $viewModel.currentError) {
@@ -44,8 +46,8 @@ struct DecryptView: View {
                     await viewModel.retryLastOperation()
                 }
             }
-            .alert("Success", isPresented: $viewModel.showingSuccess) {
-                Button("OK") { }
+            .alert(LocalizationHelper.Decrypt.successTitle, isPresented: $viewModel.showingSuccess) {
+                Button(LocalizationHelper.ok) { }
             } message: {
                 Text(viewModel.successMessage)
             }
@@ -63,26 +65,29 @@ struct DecryptView: View {
                 Image(systemName: "envelope.badge")
                     .foregroundColor(.blue)
                     .font(.title2)
+                    .accessibilityHidden(true)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Encrypted Message Detected")
-                        .font(.headline)
+                    Text(LocalizationHelper.Decrypt.bannerTitle)
+                        .font(.scaledHeadline)
                         .foregroundColor(.primary)
                     
-                    Text("Found whisper1: message in clipboard")
-                        .font(.caption)
+                    Text(LocalizationHelper.Decrypt.bannerMessage)
+                        .font(.scaledCaption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Button("Decrypt") {
+                Button(LocalizationHelper.Decrypt.bannerDecrypt) {
                     Task {
                         await viewModel.decryptFromClipboard()
                     }
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.small)
+                .accessibilityLabel("Decrypt clipboard message")
+                .accessibilityHint("Double tap to decrypt the message found in clipboard")
             }
             .padding()
             .background(Color.blue.opacity(0.1))
@@ -92,17 +97,19 @@ struct DecryptView: View {
                     .stroke(Color.blue.opacity(0.3), lineWidth: 1)
             )
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Encrypted message detected in clipboard")
     }
     
     private var manualInputSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Encrypted Message")
-                .font(.headline)
+            Text(LocalizationHelper.Decrypt.inputTitle)
+                .font(.scaledHeadline)
             
             TextEditor(text: $viewModel.inputText)
                 .frame(minHeight: 120)
                 .padding(8)
-                .background(Color(.systemGray6))
+                .background(Color.accessibleSecondaryBackground)
                 .cornerRadius(8)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
@@ -111,82 +118,90 @@ struct DecryptView: View {
                 .onChange(of: viewModel.inputText) { _ in
                     viewModel.validateInput()
                 }
+                .accessibilityLabel(LocalizationHelper.Accessibility.encryptedInput)
+                .accessibilityHint("Enter the encrypted message you want to decrypt")
+                .dynamicTypeSupport(.body)
             
             if !viewModel.inputText.isEmpty && !viewModel.isValidWhisperMessage {
-                Text("Invalid whisper message format")
-                    .font(.caption)
-                    .foregroundColor(.red)
+                Text(LocalizationHelper.Decrypt.invalidFormat)
+                    .font(.scaledCaption)
+                    .foregroundColor(.accessibleError)
             }
         }
     }
     
     private func decryptionResultSection(_ result: DecryptionResult) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Decrypted Message")
-                .font(.headline)
+            Text(LocalizationHelper.Decrypt.decryptedMessage)
+                .font(.scaledHeadline)
             
             // Sender Attribution
             senderAttributionView(result.attribution)
             
             // Message Content
             VStack(alignment: .leading, spacing: 8) {
-                Text("Content")
-                    .font(.subheadline)
+                Text(LocalizationHelper.Decrypt.content)
+                    .font(.scaledSubheadline)
                     .fontWeight(.medium)
                 
                 ScrollView {
                     Text(String(data: result.plaintext, encoding: .utf8) ?? "Unable to decode message")
-                        .font(.body)
+                        .font(.scaledBody)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.accessibleSecondaryBackground)
                         .cornerRadius(8)
                 }
                 .frame(maxHeight: 200)
+                .accessibilityLabel("Decrypted message content")
+                .accessibilityValue(String(data: result.plaintext, encoding: .utf8) ?? "Unable to decode message")
             }
             
             // Metadata
             metadataView(result)
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color.accessibleBackground)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Color(.systemGray4), lineWidth: 1)
         )
+        .accessibilityElement(children: .contain)
     }
     
     private func senderAttributionView(_ attribution: AttributionResult) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Sender")
-                .font(.subheadline)
+            Text(LocalizationHelper.Decrypt.sender)
+                .font(.scaledSubheadline)
                 .fontWeight(.medium)
             
             HStack {
                 Image(systemName: attributionIcon(attribution))
                     .foregroundColor(attributionColor(attribution))
                     .font(.title3)
+                    .accessibilityHidden(true)
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(attribution.displayString)
-                        .font(.body)
+                        .font(.scaledBody)
                         .fontWeight(.medium)
                     
                     // Trust badge for signed messages
                     HStack {
                         if case .signed(_, let trust) = attribution {
                             Text(trust)
-                                .font(.caption)
+                                .font(.scaledCaption)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 2)
-                                .background(trust == "Verified" ? Color.green : Color.orange)
+                                .background(trust == "Verified" ? Color.accessibleSuccess : Color.accessibleWarning)
                                 .foregroundColor(.white)
                                 .cornerRadius(4)
+                                .accessibilityLabel("\(trust) contact")
                         }
                         
                         Text(attributionDescription(attribution))
-                            .font(.caption)
+                            .font(.scaledCaption)
                             .foregroundColor(.secondary)
                     }
                 }
@@ -197,46 +212,50 @@ struct DecryptView: View {
             .background(attributionBackgroundColor(attribution))
             .cornerRadius(8)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Message sender: \(attribution.displayString)")
     }
     
     private func metadataView(_ result: DecryptionResult) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Message Details")
-                .font(.subheadline)
+            Text(LocalizationHelper.Decrypt.messageDetails)
+                .font(.scaledSubheadline)
                 .fontWeight(.medium)
             
             VStack(spacing: 4) {
                 HStack {
-                    Text("Received:")
-                        .font(.caption)
+                    Text(LocalizationHelper.Decrypt.received)
+                        .font(.scaledCaption)
                         .foregroundColor(.secondary)
                     Spacer()
                     Text(DateFormatter.messageTimestamp.string(from: result.timestamp))
-                        .font(.caption)
+                        .font(.scaledCaption)
                         .fontWeight(.medium)
                 }
                 
                 HStack {
-                    Text("Security:")
-                        .font(.caption)
+                    Text(LocalizationHelper.Decrypt.security)
+                        .font(.scaledCaption)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("End-to-End Encrypted")
-                        .font(.caption)
+                    Text(LocalizationHelper.Decrypt.endToEndEncrypted)
+                        .font(.scaledCaption)
                         .fontWeight(.medium)
-                        .foregroundColor(.green)
+                        .foregroundColor(.accessibleSuccess)
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.accessibleSecondaryBackground)
             .cornerRadius(8)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Message metadata")
     }
     
     private var actionButtonsSection: some View {
         VStack(spacing: 12) {
             if !viewModel.inputText.isEmpty && viewModel.isValidWhisperMessage {
-                Button("Decrypt Message") {
+                Button(LocalizationHelper.Decrypt.decryptMessage) {
                     Task {
                         await viewModel.decryptManualInput()
                     }
@@ -244,22 +263,33 @@ struct DecryptView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .disabled(viewModel.isDecrypting)
+                .frame(minHeight: AccessibilityConstants.minimumTouchTarget)
+                .accessibilityLabel(LocalizationHelper.Accessibility.decryptButton)
+                .accessibilityHint(LocalizationHelper.Accessibility.hintDecryptButton)
+                .dynamicTypeSupport(.body)
             }
             
             if viewModel.decryptionResult != nil {
                 HStack(spacing: 12) {
-                    Button("Copy Message") {
+                    Button(LocalizationHelper.Decrypt.copyMessage) {
                         viewModel.copyDecryptedMessage()
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
+                    .frame(minHeight: AccessibilityConstants.minimumTouchTarget)
+                    .accessibilityLabel("Copy decrypted message")
+                    .accessibilityHint("Double tap to copy the decrypted message to clipboard")
                     
-                    Button("Clear") {
+                    Button(LocalizationHelper.Decrypt.clear) {
                         viewModel.clearResult()
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
+                    .frame(minHeight: AccessibilityConstants.minimumTouchTarget)
+                    .accessibilityLabel("Clear results")
+                    .accessibilityHint("Double tap to clear the decryption results")
                 }
+                .dynamicTypeSupport(.body)
             }
         }
     }
