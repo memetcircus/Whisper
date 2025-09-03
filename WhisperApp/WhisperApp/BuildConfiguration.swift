@@ -63,7 +63,7 @@ enum BuildConfiguration {
     
     /// Bundle identifier
     static var bundleIdentifier: String {
-        return Bundle.main.bundleIdentifier ?? "com.whisper.app"
+        return Bundle.main.bundleIdentifier ?? "com.mehmetakifacar.Whisper"
     }
     
     /// Validate build configuration security

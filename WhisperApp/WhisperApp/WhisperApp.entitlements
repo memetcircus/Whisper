@@ -4,13 +4,13 @@
 <dict>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.whisper.app</string>
+		<string>$(AppIdentifierPrefix)com.mehmetakifacar.Whisper</string>
 	</array>
 	<key>com.apple.developer.authentication-services.autofill-credential-provider</key>
 	<false/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.whisper.app</string>
+		<string>group.com.mehmetakifacar.Whisper</string>
 	</array>
 </dict>
 </plist>

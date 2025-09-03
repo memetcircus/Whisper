@@ -5,7 +5,7 @@ import os.log
 /// Core Data-backed replay protection service with atomic operations
 class ReplayProtectionService: ReplayProtector {
     private let persistentContainer: NSPersistentContainer
-    private let logger = Logger(subsystem: "com.whisper.app", category: "ReplayProtection")
+    private let logger = Logger(subsystem: "com.mehmetakifacar.Whisper", category: "ReplayProtection")
     
     // Configuration constants
     private let maxEntries = 10_000
