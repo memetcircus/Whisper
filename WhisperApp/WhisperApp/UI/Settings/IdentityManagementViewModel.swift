@@ -81,18 +81,3 @@ class IdentityManagementViewModel: ObservableObject {
         }
     }
 }
-
-// Placeholder for PersistenceController - this would normally be defined elsewhere
-class PersistenceController {
-    static let shared = PersistenceController()
-    
-    lazy var container: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "WhisperDataModel")
-        container.loadPersistentStores { _, error in
-            if let error = error {
-                fatalError("Core Data error: \(error)")
-            }
-        }
-        return container
-    }()
-}

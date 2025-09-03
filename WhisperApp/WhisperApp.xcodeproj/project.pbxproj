@@ -26,7 +26,6 @@
 		A1000034294A0000001234567 /* ContactPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000035294A0000001234567 /* ContactPreviewView.swift */; };
 		A1000036294A0000001234567 /* QRCodeCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000037294A0000001234567 /* QRCodeCoordinatorView.swift */; };
 		A1000038294A0000001234567 /* QRCodeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000039294A0000001234567 /* QRCodeServiceTests.swift */; };
-		A100003B294A0000001234567 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100003A294A0000001234567 /* Persistence.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +62,6 @@
 		A1000029294A0000001234567 /* EnvelopeProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeProcessorTests.swift; sourceTree = "<group>"; };
 		A100002D294A0000001234567 /* MessagePaddingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePaddingTests.swift; sourceTree = "<group>"; };
 		A1000039294A0000001234567 /* QRCodeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeServiceTests.swift; sourceTree = "<group>"; };
-		A100003A294A0000001234567 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +107,6 @@
 				A100000D294A0000001234567 /* Info.plist */,
 				A1000000294A0000001234567 /* WhisperApp.swift */,
 				A1000002294A0000001234567 /* ContentView.swift */,
-				A100003A294A0000001234567 /* Persistence.swift */,
 				A1000011294A0000001234567 /* Core */,
 				A1000012294A0000001234567 /* Services */,
 				A1000013294A0000001234567 /* UI */,
