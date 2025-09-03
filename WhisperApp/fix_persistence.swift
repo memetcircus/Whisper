@@ -1,0 +1,27 @@
+#!/usr/bin/env swift
+
+import Foundation
+
+print("🔧 Persistence.swift Fix Guide")
+print("=============================")
+print()
+print("The Persistence.swift file has been created with the correct configuration for WhisperDataModel.")
+print()
+print("To add it to your Xcode project:")
+print("1. Open WhisperApp.xcodeproj in Xcode")
+print("2. Right-click on the 'WhisperApp' folder in the Project Navigator")
+print("3. Select 'Add Files to \"WhisperApp\"'")
+print("4. Navigate to and select 'Persistence.swift'")
+print("5. Make sure 'Add to target: WhisperApp' is checked")
+print("6. Click 'Add'")
+print()
+print("Alternatively, you can use the clean project structure:")
+print("- The WhisperApp_Clean directory has everything properly configured")
+print("- Follow the setup instructions in WhisperApp_Clean/SETUP_INSTRUCTIONS.md")
+print()
+print("The new Persistence.swift file:")
+print("✅ Uses 'WhisperDataModel' instead of 'Whisper'")
+print("✅ Creates sample IdentityEntity and ContactEntity for preview")
+print("✅ Removes references to non-existent 'Item' entity")
+print()
+print("After adding the file, your app should build without Core Data errors.")
