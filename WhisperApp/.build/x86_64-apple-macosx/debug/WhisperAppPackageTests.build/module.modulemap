@@ -1,0 +1,4 @@
+module WhisperAppPackageTests {
+    header "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperAppPackageTests.build/WhisperAppPackageTests-Swift.h"
+    requires objc
+}

@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperAppPackageTests.build/master.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperAppPackageTests.derived/runner.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperAppPackageTests.build/runner.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperAppPackageTests.build/runner.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperAppPackageTests.build/runner~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperAppPackageTests.build/runner.swiftdeps"
+  }
+}

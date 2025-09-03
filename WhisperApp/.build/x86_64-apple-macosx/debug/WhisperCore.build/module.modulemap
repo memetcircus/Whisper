@@ -1,0 +1,4 @@
+module WhisperCore {
+    header "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/WhisperCore-Swift.h"
+    requires objc
+}

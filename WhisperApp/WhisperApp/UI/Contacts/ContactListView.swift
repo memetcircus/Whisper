@@ -1,5 +1,5 @@
-import SwiftUI
 import CoreData
+import SwiftUI
 
 // MARK: - Contact List View
 
@@ -11,15 +11,17 @@ struct ContactListView: View {
     @State private var searchText = ""
     @State private var showingKeyRotationWarning = false
     @State private var keyRotationContact: Contact?
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 // Search bar
-                SearchBar(text: $searchText, placeholder: LocalizationHelper.Contact.searchPlaceholder)
-                    .padding(.horizontal)
-                    .padding(.top, 8)
-                
+                SearchBar(
+                    text: $searchText, placeholder: LocalizationHelper.Contact.searchPlaceholder
+                )
+                .padding(.horizontal)
+                .padding(.top, 8)
+
                 // Contact list
                 List {
                     ForEach(filteredContacts, id: \.id) { contact in
@@ -28,12 +30,19 @@ struct ContactListView: View {
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             // Block/Unblock action
-                            Button(contact.isBlocked ? LocalizationHelper.Contact.unblockTitle : LocalizationHelper.Contact.blockTitle) {
+                            Button(
+                                contact.isBlocked
+                                    ? LocalizationHelper.Contact.unblockTitle
+                                    : LocalizationHelper.Contact.blockTitle
+                            ) {
                                 toggleBlockStatus(for: contact)
                             }
                             .tint(contact.isBlocked ? .green : .red)
-                            .accessibilityLabel(contact.isBlocked ? "Unblock \(contact.displayName)" : "Block \(contact.displayName)")
-                            
+                            .accessibilityLabel(
+                                contact.isBlocked
+                                    ? "Unblock \(contact.displayName)"
+                                    : "Block \(contact.displayName)")
+
                             // Delete action
                             Button(LocalizationHelper.delete, role: .destructive) {
                                 deleteContact(contact)
@@ -67,13 +76,13 @@ struct ContactListView: View {
                     .accessibilityLabel(LocalizationHelper.Contact.addTitle)
                     .accessibilityHint("Double tap to add a new contact")
                 }
-                
+
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
                         Button(LocalizationHelper.Contact.exportKeybook) {
                             exportKeybook()
                         }
-                        
+
                         Button(LocalizationHelper.Contact.importContacts) {
                             // TODO: Implement import functionality
                         }
@@ -112,9 +121,9 @@ struct ContactListView: View {
             }
         }
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private var filteredContacts: [Contact] {
         if searchText.isEmpty {
             return viewModel.contacts
@@ -122,9 +131,9 @@ struct ContactListView: View {
             return viewModel.searchContacts(query: searchText)
         }
     }
-    
+
     // MARK: - Actions
-    
+
     private func toggleBlockStatus(for contact: Contact) {
         do {
             if contact.isBlocked {
@@ -137,7 +146,7 @@ struct ContactListView: View {
             print("Error toggling block status: \(error)")
         }
     }
-    
+
     private func deleteContact(_ contact: Contact) {
         do {
             try viewModel.deleteContact(contact.id)
@@ -146,7 +155,7 @@ struct ContactListView: View {
             print("Error deleting contact: \(error)")
         }
     }
-    
+
     private func exportKeybook() {
         do {
             let keybookData = try viewModel.exportKeybook()
@@ -157,7 +166,7 @@ struct ContactListView: View {
             print("Error exporting keybook: \(error)")
         }
     }
-    
+
     private func checkForKeyRotations() {
         // Check for contacts that need key rotation warnings
         for contact in viewModel.contacts {
@@ -175,33 +184,33 @@ struct ContactListView: View {
 struct ContactRowView: View {
     let contact: Contact
     let onTap: () -> Void
-    
+
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
                 // Avatar
                 ContactAvatarView(contact: contact)
-                
+
                 // Contact info
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text(contact.displayName)
                             .font(.scaledHeadline)
                             .foregroundColor(.primary)
-                        
+
                         Spacer()
-                        
+
                         // Trust badge
                         TrustBadgeView(trustLevel: contact.trustLevel)
                     }
-                    
+
                     HStack {
                         Text("ID: \(contact.shortFingerprint)")
                             .font(.scaledCaption)
                             .foregroundColor(.secondary)
-                        
+
                         Spacer()
-                        
+
                         if contact.isBlocked {
                             Text(LocalizationHelper.Contact.blockedBadge)
                                 .font(.scaledCaption)
@@ -210,13 +219,16 @@ struct ContactRowView: View {
                                 .padding(.vertical, 2)
                                 .background(Color.red.opacity(0.1))
                                 .cornerRadius(4)
-                                .accessibilityLabel(LocalizationHelper.Accessibility.trustBadgeBlocked())
+                                .accessibilityLabel(
+                                    LocalizationHelper.Accessibility.trustBadgeBlocked())
                         }
-                        
+
                         if let lastSeen = contact.lastSeenAt {
-                            Text("\(LocalizationHelper.Contact.lastSeen): \(lastSeen, style: .relative)")
-                                .font(.scaledCaption2)
-                                .foregroundColor(.secondary)
+                            Text(
+                                "\(LocalizationHelper.Contact.lastSeen): \(lastSeen, style: .relative)"
+                            )
+                            .font(.scaledCaption2)
+                            .foregroundColor(.secondary)
                         }
                     }
                 }
@@ -233,14 +245,15 @@ struct ContactRowView: View {
 
 struct ContactAvatarView: View {
     let contact: Contact
-    
+
     var body: some View {
         ZStack {
             Circle()
                 .fill(avatarColor)
-                .frame(width: AccessibilityConstants.minimumTouchTarget, 
-                       height: AccessibilityConstants.minimumTouchTarget)
-            
+                .frame(
+                    width: AccessibilityConstants.minimumTouchTarget,
+                    height: AccessibilityConstants.minimumTouchTarget)
+
             Text(initials)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.white)
@@ -248,14 +261,14 @@ struct ContactAvatarView: View {
         .accessibilityLabel(LocalizationHelper.Accessibility.contactAvatar(contact.displayName))
         .accessibilityAddTraits(.isImage)
     }
-    
+
     private var initials: String {
         let components = contact.displayName.components(separatedBy: CharacterSet.whitespaces)
         let firstInitial = components.first?.first?.uppercased() ?? ""
         let lastInitial = components.count > 1 ? components.last?.first?.uppercased() ?? "" : ""
         return firstInitial + lastInitial
     }
-    
+
     private var avatarColor: Color {
         // Generate consistent color based on contact ID
         let hash = contact.id.hashValue
@@ -268,12 +281,12 @@ struct ContactAvatarView: View {
 
 struct TrustBadgeView: View {
     let trustLevel: TrustLevel
-    
+
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: iconName)
                 .font(.scaledCaption2)
-            
+
             Text(trustLevel.displayName)
                 .font(.scaledCaption2)
                 .fontWeight(.medium)
@@ -286,7 +299,7 @@ struct TrustBadgeView: View {
         .trustBadgeAccessibility(for: trustLevel)
         .dynamicTypeSupport(.caption2)
     }
-    
+
     private var iconName: String {
         switch trustLevel {
         case .verified:
@@ -297,7 +310,7 @@ struct TrustBadgeView: View {
             return "xmark.shield.fill"
         }
     }
-    
+
     private var textColor: Color {
         switch trustLevel {
         case .verified:
@@ -308,7 +321,7 @@ struct TrustBadgeView: View {
             return .red
         }
     }
-    
+
     private var backgroundColor: Color {
         switch trustLevel {
         case .verified:
@@ -326,19 +339,19 @@ struct TrustBadgeView: View {
 struct SearchBar: View {
     @Binding var text: String
     let placeholder: String
-    
+
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.secondary)
                 .accessibilityHidden(true)
-            
+
             TextField(placeholder, text: $text)
                 .textFieldStyle(PlainTextFieldStyle())
                 .accessibilityLabel("Search contacts")
                 .accessibilityHint("Enter text to search for contacts")
                 .dynamicTypeSupport(.body)
-            
+
             if !text.isEmpty {
                 Button(action: { text = "" }) {
                     Image(systemName: "xmark.circle.fill")
@@ -360,6 +373,7 @@ struct SearchBar: View {
 struct ContactListView_Previews: PreviewProvider {
     static var previews: some View {
         ContactListView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environment(
+                \.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

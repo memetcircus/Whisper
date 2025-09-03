@@ -1,0 +1,161 @@
+{
+  "": {
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/master.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/BiometricService.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BiometricService.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BiometricService.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BiometricService~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BiometricService.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/BuildConfiguration.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BuildConfiguration.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BuildConfiguration.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BuildConfiguration~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BuildConfiguration.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Contacts/Base32Crockford.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Base32Crockford.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Base32Crockford.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Base32Crockford~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Base32Crockford.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Contacts/Contact.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Contact.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Contact.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Contact~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Contact.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Contacts/ContactManager.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ContactManager.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ContactManager.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ContactManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ContactManager.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Contacts/SASWordList.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/SASWordList.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/SASWordList.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/SASWordList~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/SASWordList.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/CoreDataReplayProtector.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CoreDataReplayProtector.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CoreDataReplayProtector.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CoreDataReplayProtector~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CoreDataReplayProtector.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/CryptoEngine.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoEngine.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoEngine.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoEngine~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoEngine.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/DefaultMessagePadding.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultMessagePadding.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultMessagePadding.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultMessagePadding~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultMessagePadding.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/EnvelopeProcessor.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/EnvelopeProcessor.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/EnvelopeProcessor.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/EnvelopeProcessor~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/EnvelopeProcessor.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/MessagePadding.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MessagePadding.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MessagePadding.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MessagePadding~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MessagePadding.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/DefaultBiometricService.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultBiometricService.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultBiometricService.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultBiometricService~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultBiometricService.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Identity/IdentityManager.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/IdentityManager.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/IdentityManager.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/IdentityManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/IdentityManager.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/KeychainManager.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/KeychainManager.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/KeychainManager.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/KeychainManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/KeychainManager.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/BackgroundCryptoProcessor.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BackgroundCryptoProcessor.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BackgroundCryptoProcessor.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BackgroundCryptoProcessor~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BackgroundCryptoProcessor.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/CryptoBenchmarks.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoBenchmarks.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoBenchmarks.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoBenchmarks~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoBenchmarks.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/LazyLoadingService.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/LazyLoadingService.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/LazyLoadingService.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/LazyLoadingService~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/LazyLoadingService.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/MemoryOptimizedCrypto.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MemoryOptimizedCrypto.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MemoryOptimizedCrypto.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MemoryOptimizedCrypto~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MemoryOptimizedCrypto.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedContactManager.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedContactManager.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedContactManager.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedContactManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedContactManager.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedIdentityManager.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedIdentityManager.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedIdentityManager.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedIdentityManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedIdentityManager.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/PerformanceMonitor.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PerformanceMonitor.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PerformanceMonitor.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PerformanceMonitor~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PerformanceMonitor.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Policies/PolicyManager.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PolicyManager.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PolicyManager.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PolicyManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PolicyManager.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/QRCodeService.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/QRCodeService.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/QRCodeService.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/QRCodeService~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/QRCodeService.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/ReplayProtectionService.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtectionService.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtectionService.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtectionService~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtectionService.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/ReplayProtector.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtector.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtector.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtector~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtector.swiftdeps"
+  },
+  "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/WhisperService.swift": {
+    "dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/WhisperService.d",
+    "object": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/WhisperService.swift.o",
+    "swiftmodule": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/WhisperService~partial.swiftmodule",
+    "swift-dependencies": "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/WhisperService.swiftdeps"
+  }
+}
