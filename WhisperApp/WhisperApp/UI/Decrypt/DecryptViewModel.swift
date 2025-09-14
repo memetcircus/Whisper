@@ -175,27 +175,3 @@ class ServiceContainer {
     private init() {}
 }
 
-// MARK: - Error Types
-
-/// Policy violation types for user-friendly error messages
-enum PolicyViolationType {
-    case contactRequired
-    case signatureRequired
-    case rawKeyBlocked
-    case biometricRequired
-}
-
-/// WhisperError enum for comprehensive error handling
-enum WhisperError: Error {
-    case cryptographicFailure
-    case invalidEnvelope
-    case keyNotFound
-    case policyViolation(PolicyViolationType)
-    case biometricAuthenticationFailed
-    case replayDetected
-    case messageExpired
-    case invalidPadding
-    case contactNotFound
-    case messageNotForMe
-    case networkingDetected
-}

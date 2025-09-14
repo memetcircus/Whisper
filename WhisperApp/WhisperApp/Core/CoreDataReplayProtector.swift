@@ -87,6 +87,12 @@ class CoreDataReplayProtector: ReplayProtector {
         }
     }
     
+    var cacheSize: Int {
+        get async {
+            return await getEntryCount()
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func cleanupIfNeeded() async {

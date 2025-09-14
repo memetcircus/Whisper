@@ -3,6 +3,11 @@ import Security
 import CryptoKit
 import LocalAuthentication
 
+// MARK: - Security Constants
+
+/// Security error constants
+private let errSecUserCancel: OSStatus = -128
+
 /// Manages secure storage of cryptographic keys in the iOS Keychain
 /// Implements proper security attributes as required by the security model
 class KeychainManager {

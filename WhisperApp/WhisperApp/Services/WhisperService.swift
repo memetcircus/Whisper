@@ -540,12 +540,7 @@ extension WhisperError {
 
 // MARK: - Supporting Types
 
-/// Protocol for replay protection operations
-protocol ReplayProtector {
-    func checkAndCommit(msgId: Data, timestamp: Int64) async -> Bool
-    func isWithinFreshnessWindow(_ timestamp: Int64) -> Bool
-    func cleanup() async
-}
+
 
 /// Protocol for message padding operations
 protocol MessagePadding {

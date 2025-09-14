@@ -183,10 +183,3 @@ class ReplayProtectionService: ReplayProtector {
     }
 }
 
-// MARK: - Core Data Extensions
-
-extension ReplayProtectionEntity {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<ReplayProtectionEntity> {
-        return NSFetchRequest<ReplayProtectionEntity>(entityName: "ReplayProtectionEntity")
-    }
-}
