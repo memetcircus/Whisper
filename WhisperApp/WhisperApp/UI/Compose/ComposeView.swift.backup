@@ -1,0 +1,540 @@
+import SwiftUI
+import UniformTypeIdentifiers
+
+/// Main view for composing and encrypting messages
+/// Provides identity selection, contact picker, encryption flow, and sharing options
+struct ComposeView: View {
+    @StateObject private var viewModel = ComposeViewModel()
+    @Environment(\.dismiss) private var dismiss
+    @FocusState private var isMessageFieldFocused: Bool
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                // Identity Selection Section
+                identitySelectionSection
+
+                // Recipient Selection Section
+                recipientSelectionSection
+
+                // Message Input Section (now includes signature option)
+                messageInputSection
+
+                // Action Buttons
+                actionButtonsSection
+
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .navigationTitle(LocalizationHelper.Encrypt.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(LocalizationHelper.cancel) {
+                        dismiss()
+                    }
+                    .accessibilityLabel("Cancel compose")
+                    .accessibilityHint("Double tap to cancel message composition")
+                }
+                
+                // Keyboard toolbar for message input
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    if isMessageFieldFocused {
+                        Button("Done") {
+                            isMessageFieldFocused = false
+                        }
+                        .fontWeight(.semibold)
+                    }
+                }
+            }
+            .alert(LocalizationHelper.Error.generic, isPresented: $viewModel.showingError) {
+                Button(LocalizationHelper.ok) {}
+            } message: {
+                Text(viewModel.errorMessage)
+            }
+            .alert(
+                LocalizationHelper.Sign.bioPrepTitle, isPresented: $viewModel.showingBiometricPrompt
+            ) {
+                Button(LocalizationHelper.cancel) {
+                    viewModel.cancelBiometricAuth()
+                }
+            } message: {
+                Text(LocalizationHelper.Sign.bioPrepBody)
+            }
+            .sheet(isPresented: $viewModel.showingContactPicker) {
+                ContactPickerView(selectedContact: $viewModel.selectedContact)
+            }
+            .sheet(isPresented: $viewModel.showingShareSheet) {
+                if let encryptedMessage = viewModel.encryptedMessage {
+                    ShareSheet(items: [encryptedMessage])
+                }
+            }
+            .sheet(isPresented: $viewModel.showingQRCode) {
+                if let qrResult = viewModel.qrCodeResult {
+                    QRCodeDisplayView(
+                        qrResult: qrResult,
+                        title: "Encrypted Message"
+                    )
+                }
+            }
+            .sheet(isPresented: $viewModel.showingIdentityPicker) {
+                IdentityPickerView(viewModel: viewModel)
+            }
+        }
+    }
+
+    // MARK: - View Components
+
+    private var identitySelectionSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(LocalizationHelper.Encrypt.fromIdentity)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+
+            if let activeIdentity = viewModel.activeIdentity {
+                HStack(spacing: 12) {
+                    Text(activeIdentity.name)
+                        .font(.body)
+                        .fontWeight(.medium)
+
+                    Spacer()
+
+                    Button(LocalizationHelper.Encrypt.change) {
+                        viewModel.showIdentityPicker()
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .accessibilityLabel("Change sender identity")
+                    .accessibilityHint("Double tap to select a different identity")
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+            } else {
+                HStack {
+                    Text("Please set up your identity in Settings before proceeding.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Identity selector")
+    }
+
+    private var recipientSelectionSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(LocalizationHelper.Encrypt.to)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+
+            HStack(spacing: 12) {
+                if let selectedContact = viewModel.selectedContact {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(selectedContact.displayName)
+                            .font(.body)
+                            .fontWeight(.medium)
+
+                        HStack(spacing: 8) {
+                            Text(selectedContact.trustLevel.displayName)
+                                .font(.caption)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 2)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(4)
+
+                            Text(selectedContact.shortFingerprint)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    Spacer()
+
+                    Button(LocalizationHelper.Encrypt.change) {
+                        viewModel.showingContactPicker = true
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .accessibilityLabel("Change recipient")
+                    .accessibilityHint("Double tap to select a different recipient")
+                } else {
+                    Button(LocalizationHelper.Encrypt.selectContact) {
+                        viewModel.showingContactPicker = true
+                    }
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .cornerRadius(12)
+                    .shadow(color: Color.blue.opacity(0.3), radius: 4, x: 0, y: 2)
+                    .accessibilityLabel("Select contact recipient")
+                    .accessibilityHint("Double tap to choose a contact from your list")
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Contact selector")
+    }
+
+    private var messageInputSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(LocalizationHelper.Encrypt.message)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+
+                Spacer()
+
+                // Compact signature toggle inline with message label
+                HStack(spacing: 8) {
+                    Text(LocalizationHelper.Encrypt.includeSignature)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Toggle("", isOn: $viewModel.includeSignature)
+                        .labelsHidden()
+                        .scaleEffect(0.8)
+                        .disabled(viewModel.isSignatureRequired)
+                }
+                .accessibilityLabel("Include digital signature")
+                .accessibilityHint(
+                    viewModel.isSignatureRequired
+                        ? "Signature is required by policy"
+                        : "Toggle to include or exclude digital signature")
+            }
+
+            TextEditor(
+                text: Binding(
+                    get: { viewModel.messageText },
+                    set: { viewModel.updateMessageText($0) }
+                )
+            )
+            .frame(minHeight: 240)
+            .padding(16)
+            .background(Color(.systemBackground))
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color(.systemGray5), lineWidth: 0.5)
+            )
+            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+            .focused($isMessageFieldFocused)
+            .accessibilityLabel("Message input field")
+            .accessibilityHint("Enter the message you want to encrypt")
+
+            // Character count
+            HStack {
+                Spacer()
+                Text("\(viewModel.characterCount)/40,000")
+                    .font(.caption)
+                    .foregroundColor(viewModel.remainingCharacters < 1000 ? .orange : .secondary)
+            }
+
+            // Show signature note only if required, in a compact way
+            if viewModel.isSignatureRequired {
+                HStack {
+                    Image(systemName: "info.circle.fill")
+                        .font(.caption)
+                        .foregroundColor(.blue)
+
+                    Text(LocalizationHelper.Encrypt.signatureRequiredNote)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Spacer()
+                }
+            }
+        }
+    }
+
+    private var actionButtonsSection: some View {
+        VStack(spacing: 12) {
+            // Show encrypt button only when no encrypted message exists
+            if viewModel.showEncryptButton {
+                Button(LocalizationHelper.Encrypt.encryptMessage) {
+                    Task {
+                        await viewModel.encryptMessage()
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .disabled(!viewModel.canEncrypt)
+                .frame(minHeight: 44)
+                .accessibilityLabel("Encrypt message")
+                .accessibilityHint("Tap to encrypt the message")
+            }
+
+            // Show post-encryption buttons only when encrypted message exists
+            if viewModel.showPostEncryptionButtons {
+                HStack(spacing: 12) {
+                    Button(LocalizationHelper.Encrypt.share) {
+                        viewModel.showingShareSheet = true
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .frame(minHeight: 44)
+                    .accessibilityLabel("Share encrypted message")
+                    .accessibilityHint("Double tap to share the encrypted message")
+
+                    Button("QR Code") {
+                        viewModel.showQRCode()
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    .frame(minHeight: 44)
+                    .accessibilityLabel("Show QR code")
+                    .accessibilityHint("Double tap to display the encrypted message as a QR code")
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Contact Picker View
+
+struct ContactPickerView: View {
+    @Binding var selectedContact: Contact?
+    @StateObject private var contactManager = ContactListViewModel()
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                // Contact list - only verified contacts
+                if contactManager.isLoading {
+                    VStack {
+                        ProgressView()
+                        Text("Loading contacts...")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if verifiedContacts.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "checkmark.shield")
+                            .font(.system(size: 48))
+                            .foregroundColor(.secondary)
+
+                        Text("No Verified Contacts")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+
+                        Text(
+                            "You don't have any verified contacts yet. Add and verify contacts to send secure messages."
+                        )
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    List {
+                        ForEach(verifiedContacts, id: \.id) { contact in
+                            ContactPickerRowView(
+                                contact: contact,
+                                isSelected: selectedContact?.id == contact.id,
+                                onTap: {
+                                    selectedContact = contact
+                                    dismiss()
+                                })
+                        }
+                    }
+                    .listStyle(PlainListStyle())
+                }
+            }
+            .navigationTitle("Select Contact")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+            .onAppear {
+                contactManager.loadContacts()
+            }
+        }
+    }
+
+    private var verifiedContacts: [Contact] {
+        return contactManager.contacts.filter { $0.trustLevel == .verified }
+    }
+}
+
+// MARK: - Contact Picker Row View
+
+struct ContactPickerRowView: View {
+    let contact: Contact
+    let isSelected: Bool
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            HStack(spacing: 12) {
+                // Avatar
+                ContactAvatarView(contact: contact)
+
+                // Contact info
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(contact.displayName)
+                        .font(.body)
+                        .foregroundColor(.primary)
+
+                    Text("ID: \(contact.shortFingerprint)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                // Selection indicator - only show checkmark if this contact is selected
+                if isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.blue)
+                        .font(.title2)
+                }
+            }
+            .padding(.vertical, 8)
+        }
+        .buttonStyle(PlainButtonStyle())
+        .accessibilityLabel(contact.displayName)
+        .accessibilityHint("Double tap to select this contact for encryption")
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
+// ContactRowView is defined in ContactListView.swift
+// ShareSheet is defined in QRCodeDisplayView.swift
+
+// MARK: - Identity Picker View
+
+struct IdentityPickerView: View {
+    @ObservedObject var viewModel: ComposeViewModel
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                if viewModel.availableIdentities.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(.secondary)
+
+                        Text("No Identities Available")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+
+                        Text("Create an identity in Settings to start encrypting messages.")
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    List {
+                        let activeIdentities = viewModel.availableIdentities.filter {
+                            $0.status == .active
+                        }
+                        let archivedIdentities = viewModel.availableIdentities.filter {
+                            $0.status == .archived
+                        }
+                        if !activeIdentities.isEmpty {
+                            Section("Active Identities") {
+                                ForEach(activeIdentities, id: \.id) { identity in
+                                    identityRow(for: identity)
+                                }
+                            }
+                        }
+                        if !archivedIdentities.isEmpty {
+                            Section("Archived Identities") {
+                                ForEach(archivedIdentities, id: \.id) { identity in
+                                    identityRow(for: identity)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Select Identity")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        viewModel.showingIdentityPicker = false
+                    }
+                }
+            }
+            .onAppear {
+                // Ensure identities are loaded when view appears
+                viewModel.showIdentityPicker()
+            }
+        }
+    }
+
+    private func identityRow(for identity: Identity) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(identity.name)
+                    .font(.body)
+                    .fontWeight(.medium)
+
+                Text("Created: \(identity.createdAt, formatter: dateFormatter)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            if viewModel.activeIdentity?.id == identity.id {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundColor(.blue)
+                    .font(.title2)
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            viewModel.selectIdentity(identity)
+            dismiss()
+        }
+    }
+
+    private var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter
+    }
+}
+
+// MARK: - Preview
+
+struct ComposeView_Previews: PreviewProvider {
+    static var previews: some View {
+        ComposeView()
+    }
+}

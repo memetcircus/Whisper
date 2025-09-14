@@ -1,7 +1,7 @@
 #!/usr/bin/env swift
 
-import Foundation
 import CryptoKit
+import Foundation
 
 // MARK: - Simple Contact Management Test
 
@@ -25,8 +25,11 @@ struct Contact {
     let createdAt: Date
     var lastSeenAt: Date?
     var note: String?
-    
-    init(displayName: String, x25519PublicKey: Data, ed25519PublicKey: Data? = nil, note: String? = nil) throws {
+
+    init(
+        displayName: String, x25519PublicKey: Data, ed25519PublicKey: Data? = nil,
+        note: String? = nil
+    ) throws {
         self.id = UUID()
         self.displayName = displayName
         self.x25519PublicKey = x25519PublicKey
@@ -37,65 +40,65 @@ struct Contact {
         self.keyVersion = 1
         self.createdAt = Date()
         self.lastSeenAt = nil
-        
+
         // Generate fingerprint using SHA-256
         let hash = SHA256.hash(data: x25519PublicKey)
         self.fingerprint = Data(hash)
-        
+
         // Generate short fingerprint (Base32 Crockford, 12 chars)
         self.shortFingerprint = Contact.generateShortFingerprint(from: fingerprint)
-        
+
         // Generate SAS words (6-word sequence)
         self.sasWords = Contact.generateSASWords(from: fingerprint)
-        
+
         // Generate recipient key ID (rkid) - lower 8 bytes of fingerprint
         self.rkid = Data(fingerprint.suffix(8))
     }
-    
+
     static func generateShortFingerprint(from fingerprint: Data) -> String {
         let alphabet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
         let alphabetArray = Array(alphabet)
-        
+
         var result = ""
         var buffer: UInt64 = 0
         var bitsInBuffer = 0
-        
-        let inputData = fingerprint.prefix(8) // Use first 8 bytes
-        
+
+        let inputData = fingerprint.prefix(8)  // Use first 8 bytes
+
         for byte in inputData {
             buffer = (buffer << 8) | UInt64(byte)
             bitsInBuffer += 8
-            
+
             while bitsInBuffer >= 5 {
                 let index = Int((buffer >> (bitsInBuffer - 5)) & 0x1F)
                 result.append(alphabetArray[index])
                 bitsInBuffer -= 5
             }
         }
-        
+
         if bitsInBuffer > 0 {
             let index = Int((buffer << (5 - bitsInBuffer)) & 0x1F)
             result.append(alphabetArray[index])
         }
-        
+
         return String(result.prefix(12))
     }
-    
+
     static func generateSASWords(from fingerprint: Data) -> [String] {
         let sasWordList = [
             "able", "acid", "aged", "also", "area", "army", "away", "baby", "back", "ball",
             "band", "bank", "base", "bath", "bear", "beat", "been", "beer", "bell", "belt",
             "best", "bike", "bill", "bird", "blow", "blue", "boat", "body", "bomb", "bone",
-            "book", "boom", "born", "boss", "both", "bowl", "bulk", "burn", "bush", "busy"
+            "book", "boom", "born", "boss", "both", "bowl", "bulk", "burn", "bush", "busy",
         ]
-        
+
         var words: [String] = []
         let bytes = Array(fingerprint.prefix(6))
         for byte in bytes {
             let index = Int(byte) % sasWordList.count
             words.append(sasWordList[index])
         }
-        
+
         return words
     }
 }
@@ -104,7 +107,7 @@ enum TrustLevel: String, CaseIterable {
     case unverified = "unverified"
     case verified = "verified"
     case revoked = "revoked"
-    
+
     var displayName: String {
         switch self {
         case .unverified: return "Unverified"
@@ -164,14 +167,15 @@ let fingerprintConsistent = fingerprint1 == fingerprint2
 print("✓ Fingerprint consistency: \(fingerprintConsistent ? "CONSISTENT" : "INCONSISTENT")")
 
 let differentKey = Data(repeating: 0x43, count: 32)
-let differentFingerprint = try Contact(displayName: "Test3", x25519PublicKey: differentKey).fingerprint
+let differentFingerprint = try Contact(displayName: "Test3", x25519PublicKey: differentKey)
+    .fingerprint
 let fingerprintUnique = fingerprint1 != differentFingerprint
 print("✓ Fingerprint uniqueness: \(fingerprintUnique ? "UNIQUE" : "COLLISION")")
 
 // Test Base32 Crockford encoding
 print("\n5. Testing Base32 Crockford Encoding...")
 
-let testData = Data([0x48, 0x65, 0x6C, 0x6C, 0x6F]) // "Hello"
+let testData = Data([0x48, 0x65, 0x6C, 0x6C, 0x6F])  // "Hello"
 let encoded = Contact.generateShortFingerprint(from: testData)
 print("✓ Base32 encoding of 'Hello': \(encoded)")
 

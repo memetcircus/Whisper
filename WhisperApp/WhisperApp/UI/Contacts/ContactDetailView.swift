@@ -1,86 +1,70 @@
 import SwiftUI
 
 // MARK: - Contact Detail View
-
 struct ContactDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: ContactDetailViewModel
-    
     let onContactUpdated: (Contact) -> Void
-    
     @State private var showingVerificationSheet = false
     @State private var showingEditSheet = false
     @State private var showingDeleteAlert = false
     @State private var showingBlockAlert = false
-    
+
     init(contact: Contact, onContactUpdated: @escaping (Contact) -> Void) {
         self._viewModel = StateObject(wrappedValue: ContactDetailViewModel(contact: contact))
         self.onContactUpdated = onContactUpdated
     }
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(spacing: 24) {
-                    // Header section
+                VStack(spacing: 20) {
+                    // Enhanced Header section with better visual hierarchy
                     ContactHeaderView(contact: viewModel.contact)
                     
-                    // Trust status section
+                    // Trust status section with improved design
                     TrustStatusSection(
                         contact: viewModel.contact,
                         onVerify: { showingVerificationSheet = true }
                     )
                     
-                    // Fingerprint section
+                    // Fingerprint section with better UX
                     FingerprintSection(contact: viewModel.contact)
                     
-                    // SAS words section
+                    // SAS words section with improved layout
                     SASWordsSection(contact: viewModel.contact)
                     
-                    // Key information section
+                    // Key information section with better organization
                     KeyInformationSection(contact: viewModel.contact)
                     
-                    // Note section
+                    // Note section with improved styling
                     if let note = viewModel.contact.note, !note.isEmpty {
                         NoteSection(note: note)
                     }
                     
-                    // Key history section
+                    // Key history section with better presentation
                     if !viewModel.contact.keyHistory.isEmpty {
                         KeyHistorySection(keyHistory: viewModel.contact.keyHistory)
                     }
-                    
-                    // Actions section
-                    ActionsSection(
-                        contact: viewModel.contact,
-                        onEdit: { showingEditSheet = true },
-                        onBlock: { showingBlockAlert = true },
-                        onDelete: { showingDeleteAlert = true }
-                    )
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.vertical, 8)
             }
-            .navigationTitle(viewModel.contact.displayName)
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color(.systemGroupedBackground))
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Done") {
                         dismiss()
                     }
+                    .font(.system(.body, weight: .medium))
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button("Edit Contact") {
                             showingEditSheet = true
-                        }
-                        
-                        Button("Share QR Code") {
-                            viewModel.showQRCode()
-                        }
-                        
-                        Button("Export Public Key") {
-                            exportPublicKey()
                         }
                         
                         Divider()
@@ -94,6 +78,7 @@ struct ContactDetailView: View {
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
+                            .font(.system(.body, weight: .medium))
                     }
                 }
             }
@@ -110,18 +95,18 @@ struct ContactDetailView: View {
                 }
             }
             .alert("Block Contact", isPresented: $showingBlockAlert) {
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) {}
                 Button(viewModel.contact.isBlocked ? "Unblock" : "Block") {
                     viewModel.toggleBlockStatus()
                     onContactUpdated(viewModel.contact)
                 }
             } message: {
-                Text(viewModel.contact.isBlocked ? 
-                     "Are you sure you want to unblock this contact?" :
-                     "Are you sure you want to block this contact? You won't be able to send or receive messages from them.")
+                Text(viewModel.contact.isBlocked 
+                    ? "Are you sure you want to unblock this contact?" 
+                    : "Are you sure you want to block this contact? You won't be able to send or receive messages from them.")
             }
             .alert("Delete Contact", isPresented: $showingDeleteAlert) {
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) {}
                 Button("Delete", role: .destructive) {
                     // TODO: Implement delete functionality
                     dismiss()
@@ -139,76 +124,118 @@ struct ContactDetailView: View {
             }
         }
     }
-    
-    private func exportPublicKey() {
-        // TODO: Implement public key export
-        print("Exporting public key for \(viewModel.contact.displayName)")
-    }
 }
 
-// MARK: - Contact Header View
-
+// MARK: - Contact Header View (Enhanced but build-safe)
 struct ContactHeaderView: View {
     let contact: Contact
-    
+
     var body: some View {
         VStack(spacing: 16) {
-            ContactAvatarView(contact: contact)
-                .scaleEffect(1.5)
-            
-            VStack(spacing: 4) {
+            // Enhanced avatar with trust indicator
+            ZStack {
+                ContactAvatarView(contact: contact)
+                    .scaleEffect(1.8)
+                
+                // Trust level overlay - enhanced
+                if contact.trustLevel == .verified {
+                    Circle()
+                        .fill(Color.green)
+                        .frame(width: 24, height: 24)
+                        .overlay(
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(.white)
+                        )
+                        .offset(x: 30, y: -30)
+                        .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
+                }
+            }
+
+            VStack(spacing: 8) {
                 Text(contact.displayName)
                     .font(.title2)
-                    .fontWeight(.semibold)
-                
-                Text("ID: \(contact.shortFingerprint)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                
-                if let lastSeen = contact.lastSeenAt {
-                    Text("Last seen: \(lastSeen, style: .relative)")
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+
+                // Enhanced ID display
+                HStack(spacing: 4) {
+                    Image(systemName: "key")
+                        .foregroundColor(.blue)
                         .font(.caption)
+                    Text("ID: \(contact.shortFingerprint)")
+                        .font(.system(.subheadline, design: .monospaced))
                         .foregroundColor(.secondary)
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+
+                if let lastSeen = contact.lastSeenAt {
+                    HStack(spacing: 4) {
+                        Image(systemName: "clock")
+                            .foregroundColor(.green)
+                            .font(.caption)
+                        Text("Last seen: \(lastSeen, style: .relative)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
         }
+        .padding(.vertical, 8)
     }
 }
 
-// MARK: - Trust Status Section
-
+// MARK: - Trust Status Section (Enhanced)
 struct TrustStatusSection: View {
     let contact: Contact
     let onVerify: () -> Void
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Trust Status")
-                .font(.headline)
-            
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
-                TrustBadgeView(trustLevel: contact.trustLevel)
-                
+                Image(systemName: "shield.lefthalf.filled")
+                    .foregroundColor(.blue)
+                Text("Trust Status")
+                    .font(.headline)
+                    .fontWeight(.semibold)
                 Spacer()
-                
-                if contact.trustLevel != .verified {
-                    Button("Verify Contact") {
-                        onVerify()
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.small)
-                }
             }
-            
-            Text(trustStatusDescription)
-                .font(.caption)
-                .foregroundColor(.secondary)
+
+            VStack(spacing: 12) {
+                HStack {
+                    TrustBadgeView(trustLevel: contact.trustLevel)
+                        .scaleEffect(1.1)
+                    
+                    Spacer()
+                    
+                    if contact.trustLevel != .verified {
+                        Button("Verify Contact") {
+                            onVerify()
+                        }
+                        .font(.system(.subheadline, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                    }
+                }
+
+                Text(trustStatusDescription)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
-        .padding()
-        .background(Color(.systemGray6))
+        .padding(16)
+        .background(Color(.systemBackground))
         .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
     }
-    
+
     private var trustStatusDescription: String {
         switch contact.trustLevel {
         case .verified:
@@ -221,264 +248,331 @@ struct TrustStatusSection: View {
     }
 }
 
-// MARK: - Fingerprint Section
-
+// MARK: - Fingerprint Section (Enhanced)
 struct FingerprintSection: View {
     let contact: Contact
     @State private var showingFullFingerprint = false
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
+                Image(systemName: "key.horizontal.fill")
+                    .foregroundColor(.green)
                 Text("Fingerprint")
                     .font(.headline)
+                    .fontWeight(.semibold)
                 
                 Spacer()
                 
                 Button(showingFullFingerprint ? "Hide" : "Show Full") {
-                    showingFullFingerprint.toggle()
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showingFullFingerprint.toggle()
+                    }
                 }
                 .font(.caption)
+                .foregroundColor(.blue)
             }
-            
-            if showingFullFingerprint {
-                Text(fullFingerprintDisplay)
-                    .font(.system(.caption, design: .monospaced))
-                    .foregroundColor(.secondary)
-                    .textSelection(.enabled)
-            } else {
-                Text("Short ID: \(contact.shortFingerprint)")
-                    .font(.system(.body, design: .monospaced))
-                    .textSelection(.enabled)
+
+            VStack(alignment: .leading, spacing: 8) {
+                if showingFullFingerprint {
+                    Text("Full Fingerprint:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Text(fullFingerprintDisplay)
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundColor(.primary)
+                        .textSelection(.enabled)
+                        .padding(12)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                } else {
+                    Text("Short ID:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Text(contact.shortFingerprint)
+                        .font(.system(.body, design: .monospaced))
+                        .fontWeight(.medium)
+                        .textSelection(.enabled)
+                        .padding(12)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                }
             }
         }
-        .padding()
-        .background(Color(.systemGray6))
+        .padding(16)
+        .background(Color(.systemBackground))
         .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
     }
-    
+
     private var fullFingerprintDisplay: String {
         return contact.fingerprint.map { String(format: "%02x", $0) }.joined(separator: " ")
     }
 }
 
-// MARK: - SAS Words Section
-
+// MARK: - SAS Words Section (Enhanced)
 struct SASWordsSection: View {
     let contact: Contact
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Image(systemName: "text.bubble.fill")
+                    .foregroundColor(.orange)
+                Text("SAS Words")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Use these words to verify the contact in person:")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
+                    ForEach(Array(contact.sasWords.enumerated()), id: \.offset) { index, word in
+                        HStack {
+                            Text("\(index + 1).")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .frame(width: 20, alignment: .leading)
+                            
+                            Text(word)
+                                .font(.system(.body, weight: .medium))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+    }
+}
+
+// MARK: - Key Information Section (Enhanced)
+struct KeyInformationSection: View {
+    let contact: Contact
+    @State private var showingTechnicalDetails = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Image(systemName: "info.circle.fill")
+                    .foregroundColor(.purple)
+                Text("Technical Information")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                Button(showingTechnicalDetails ? "Hide Advanced" : "Show Advanced") {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showingTechnicalDetails.toggle()
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.blue)
+            }
+
+            // Always show basic info
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Key Version")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("\(contact.keyVersion)")
+                        .font(.body)
+                        .fontWeight(.medium)
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("Created")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text(contact.createdAt, style: .date)
+                        .font(.body)
+                        .fontWeight(.medium)
+                }
+            }
+            .padding(12)
+            .background(Color(.systemGray6))
+            .cornerRadius(8)
+
+            if showingTechnicalDetails {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                        Text("Advanced Technical Details")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.orange)
+                    }
+                    
+                    Text("These cryptographic keys are for technical verification only. Do not share these values.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.bottom, 8)
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        KeyDisplayView(
+                            title: "Encryption Key (X25519):",
+                            key: contact.x25519PublicKey.base64EncodedString()
+                        )
+                        
+                        if let ed25519Key = contact.ed25519PublicKey {
+                            KeyDisplayView(
+                                title: "Signing Key (Ed25519):",
+                                key: ed25519Key.base64EncodedString()
+                            )
+                        }
+                    }
+                }
+                .padding(12)
+                .background(Color.orange.opacity(0.1))
+                .cornerRadius(8)
+            }
+        }
+        .padding(16)
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+    }
+}
+
+// MARK: - Key Display View
+struct KeyDisplayView: View {
+    let title: String
+    let key: String
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("SAS Words")
-                .font(.headline)
-            
-            Text("Use these words to verify the contact in person:")
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
             
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 8) {
-                ForEach(Array(contact.sasWords.enumerated()), id: \.offset) { index, word in
-                    HStack {
-                        Text("\(index + 1).")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .frame(width: 20, alignment: .leading)
-                        
-                        Text(word)
-                            .font(.body)
-                            .fontWeight(.medium)
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(Color(.systemBackground))
-                    .cornerRadius(8)
-                }
-            }
+            Text(key)
+                .font(.system(.caption2, design: .monospaced))
+                .textSelection(.enabled)
+                .padding(8)
+                .background(Color(.systemBackground))
+                .cornerRadius(6)
         }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
     }
 }
 
-// MARK: - Key Information Section
-
-struct KeyInformationSection: View {
-    let contact: Contact
-    @State private var showingKeys = false
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Cryptographic Keys")
-                    .font(.headline)
-                
-                Spacer()
-                
-                Button(showingKeys ? "Hide" : "Show") {
-                    showingKeys.toggle()
-                }
-                .font(.caption)
-            }
-            
-            if showingKeys {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("X25519 Public Key:")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    Text(contact.x25519PublicKey.base64EncodedString())
-                        .font(.system(.caption2, design: .monospaced))
-                        .textSelection(.enabled)
-                    
-                    if let ed25519Key = contact.ed25519PublicKey {
-                        Text("Ed25519 Signing Key:")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.top, 8)
-                        
-                        Text(ed25519Key.base64EncodedString())
-                            .font(.system(.caption2, design: .monospaced))
-                            .textSelection(.enabled)
-                    }
-                }
-            }
-            
-            HStack {
-                Text("Key Version: \(contact.keyVersion)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-                
-                Text("Created: \(contact.createdAt, style: .date)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
-    }
-}
-
-// MARK: - Note Section
-
+// MARK: - Note Section (Enhanced)
 struct NoteSection: View {
     let note: String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Note")
-                .font(.headline)
-            
+            HStack {
+                Image(systemName: "note.text")
+                    .foregroundColor(.indigo)
+                Text("Note")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+
             Text(note)
                 .font(.body)
+                .foregroundColor(.primary)
+                .padding(12)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
         }
-        .padding()
-        .background(Color(.systemGray6))
+        .padding(16)
+        .background(Color(.systemBackground))
         .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
     }
 }
 
-// MARK: - Key History Section
-
+// MARK: - Key History Section (Enhanced)
 struct KeyHistorySection: View {
     let keyHistory: [KeyHistoryEntry]
     @State private var showingHistory = false
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
+                Image(systemName: "clock.arrow.circlepath")
+                    .foregroundColor(.teal)
                 Text("Key History")
                     .font(.headline)
+                    .fontWeight(.semibold)
                 
                 Spacer()
                 
                 Button(showingHistory ? "Hide" : "Show") {
-                    showingHistory.toggle()
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showingHistory.toggle()
+                    }
                 }
                 .font(.caption)
+                .foregroundColor(.blue)
             }
-            
+
             if showingHistory {
-                ForEach(keyHistory.sorted(by: { $0.createdAt > $1.createdAt }), id: \.id) { entry in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text("Version \(entry.keyVersion)")
-                                .font(.subheadline)
-                                .fontWeight(.medium)
+                VStack(spacing: 8) {
+                    ForEach(keyHistory.sorted(by: { $0.createdAt > $1.createdAt }), id: \.id) { entry in
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Version \(entry.keyVersion)")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                
+                                Spacer()
+                                
+                                Text(entry.createdAt, style: .date)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
                             
-                            Spacer()
-                            
-                            Text(entry.createdAt, style: .date)
-                                .font(.caption)
+                            Text(entry.fingerprint.prefix(16).map { String(format: "%02x", $0) }.joined(separator: " ") + "...")
+                                .font(.system(.caption2, design: .monospaced))
                                 .foregroundColor(.secondary)
                         }
-                        
-                        Text(entry.fingerprint.prefix(16).map { String(format: "%02x", $0) }.joined(separator: " ") + "...")
-                            .font(.system(.caption2, design: .monospaced))
-                            .foregroundColor(.secondary)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(Color(.systemBackground))
-                    .cornerRadius(8)
                 }
             }
         }
-        .padding()
-        .background(Color(.systemGray6))
+        .padding(16)
+        .background(Color(.systemBackground))
         .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
     }
 }
 
-// MARK: - Actions Section
+// Note: ContactAvatarView and TrustBadgeView are defined in ContactListView.swift
+// and are automatically available here since they're in the same module
 
-struct ActionsSection: View {
-    let contact: Contact
-    let onEdit: () -> Void
-    let onBlock: () -> Void
-    let onDelete: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 12) {
-            Button("Edit Contact") {
-                onEdit()
-            }
-            .buttonStyle(.bordered)
-            .controlSize(.large)
-            .frame(maxWidth: .infinity)
-            
-            HStack(spacing: 12) {
-                Button(contact.isBlocked ? "Unblock" : "Block") {
-                    onBlock()
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .frame(maxWidth: .infinity)
-                
-                Button("Delete") {
-                    onDelete()
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .frame(maxWidth: .infinity)
-                .foregroundColor(.red)
-            }
-        }
-    }
-}
-
-// MARK: - Preview
-
+// MARK: - Previews
 struct ContactDetailView_Previews: PreviewProvider {
     static var previews: some View {
         ContactDetailView(contact: sampleContact) { _ in }
     }
-    
+
     static var sampleContact: Contact {
         let publicKey = Data(repeating: 0x01, count: 32)
         return try! Contact(

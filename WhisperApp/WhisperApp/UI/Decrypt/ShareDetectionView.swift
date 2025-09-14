@@ -7,28 +7,28 @@ struct ShareDetectionView: View {
     let sharedText: String
     @State private var showingDecryptView = false
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
                 Image(systemName: "square.and.arrow.down")
                     .font(.system(size: 60))
                     .foregroundColor(.blue)
-                
+
                 Text("Shared Content Detected")
                     .font(.title2)
                     .fontWeight(.bold)
-                
+
                 Text("The shared content appears to be an encrypted Whisper message.")
                     .font(.body)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
                     .padding(.horizontal)
-                
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Message Preview")
                         .font(.headline)
-                    
+
                     ScrollView {
                         Text(sharedText.prefix(200) + (sharedText.count > 200 ? "..." : ""))
                             .font(.caption)
@@ -41,14 +41,14 @@ struct ShareDetectionView: View {
                     .frame(maxHeight: 100)
                 }
                 .padding(.horizontal)
-                
+
                 VStack(spacing: 12) {
                     Button("Decrypt Message") {
                         showingDecryptView = true
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
-                    
+
                     Button("Cancel") {
                         dismiss()
                     }
@@ -56,7 +56,7 @@ struct ShareDetectionView: View {
                     .controlSize(.large)
                 }
                 .padding(.horizontal, 40)
-                
+
                 Spacer()
             }
             .padding()
@@ -81,7 +81,7 @@ struct DecryptViewWithPrefilledText: View {
     let prefilledText: String
     @StateObject private var viewModel = DecryptViewModel()
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         DecryptView()
             .onAppear {
@@ -97,13 +97,13 @@ struct DecryptViewWithPrefilledText: View {
 class ShareExtensionHandler: ObservableObject {
     @Published var hasSharedWhisperMessage = false
     @Published var sharedText = ""
-    
+
     private let whisperService: WhisperService
-    
+
     init(whisperService: WhisperService = ServiceContainer.shared.whisperService) {
         self.whisperService = whisperService
     }
-    
+
     /// Processes shared content from other apps
     func handleSharedContent(_ items: [Any]) {
         for item in items {
@@ -115,11 +115,11 @@ class ShareExtensionHandler: ObservableObject {
                 }
             }
         }
-        
+
         hasSharedWhisperMessage = false
         sharedText = ""
     }
-    
+
     /// Clears shared content after processing
     func clearSharedContent() {
         hasSharedWhisperMessage = false
@@ -134,12 +134,13 @@ extension WhisperApp {
     /// Handles incoming URLs (for whisper:// scheme)
     func handleIncomingURL(_ url: URL) {
         guard url.scheme == "whisper" else { return }
-        
+
         // Extract message from URL
         if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-           let messageItem = components.queryItems?.first(where: { $0.name == "message" }),
-           let message = messageItem.value {
-            
+            let messageItem = components.queryItems?.first(where: { $0.name == "message" }),
+            let message = messageItem.value
+        {
+
             // Check if it's a valid whisper message
             let whisperService = ServiceContainer.shared.whisperService
             if whisperService.detect(message) {

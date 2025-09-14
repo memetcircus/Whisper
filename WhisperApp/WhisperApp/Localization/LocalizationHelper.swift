@@ -68,6 +68,12 @@ struct LocalizationHelper {
         static let trustLevel = NSLocalizedString("contact.trust_level", comment: "Trust level")
         static let lastSeen = NSLocalizedString("contact.last_seen", comment: "Last seen")
         static let neverSeen = NSLocalizedString("contact.never_seen", comment: "Never seen")
+        
+        // Key Rotation Security
+        static let keyRotationWarning = NSLocalizedString("contact.keyRotation.warning", comment: "Key rotation warning message")
+        static let keyRotationAlertTitle = NSLocalizedString("contact.keyRotation.title", comment: "Key rotation alert title")
+        static let keyRotationAction = NSLocalizedString("contact.keyRotation.action", comment: "Re-verify contact action")
+        static let keyRotationExplanation = NSLocalizedString("contact.keyRotation.explanation", comment: "Key rotation explanation")
     }
     
     // MARK: - Identity

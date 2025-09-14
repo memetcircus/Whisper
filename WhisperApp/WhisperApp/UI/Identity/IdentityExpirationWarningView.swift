@@ -1,4 +1,5 @@
 import SwiftUI
+import CryptoKit
 
 /// View that displays warnings for identities approaching key rotation deadlines
 /// Shows when identities are within 30 days of recommended rotation (1 year)

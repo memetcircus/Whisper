@@ -1,81 +1,243 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+// Enhanced button styles for Export/Import
+struct ExportImportActionButtonStyle: ButtonStyle {
+    let color: Color
+    let isDisabled: Bool
+    
+    init(color: Color, isDisabled: Bool = false) {
+        self.color = color
+        self.isDisabled = isDisabled
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(.subheadline, design: .rounded, weight: .semibold))
+            .foregroundColor(isDisabled ? .gray : color)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(isDisabled ? Color.gray.opacity(0.1) : color.opacity(0.1))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(isDisabled ? Color.gray.opacity(0.3) : color.opacity(0.3), lineWidth: 1)
+            )
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
+extension ButtonStyle where Self == ExportImportActionButtonStyle {
+    static func exportImportAction(color: Color, isDisabled: Bool = false) -> ExportImportActionButtonStyle {
+        ExportImportActionButtonStyle(color: color, isDisabled: isDisabled)
+    }
+}
+
 struct ExportImportView: View {
     @StateObject private var viewModel = ExportImportViewModel()
     @State private var showingContactExport = false
     @State private var showingContactImport = false
     @State private var showingIdentityExport = false
-    
+    @State private var showingPublicKeyImport = false
+
     var body: some View {
         List {
-            Section("Contacts") {
-                Button("Export Contacts") {
-                    viewModel.exportContacts()
+            // Header Section
+            Section {
+                VStack(spacing: 12) {
+                    HStack {
+                        Image(systemName: "arrow.up.arrow.down.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Export/Import")
+                                .font(.headline)
+                            Text("Share and receive contacts and public keys")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Spacer()
+                    }
                 }
-                .disabled(viewModel.contacts.isEmpty)
-                
-                Button("Import Contacts") {
-                    showingContactImport = true
-                }
-                
-                Text("Export your contact list as a public keybook or import contacts from other Whisper instances.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                .padding(.vertical, 8)
             }
-            
-            Section("Public Key Bundles") {
-                Button("Export Identity Public Keys") {
-                    showingIdentityExport = true
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+
+            // Contacts Section
+            Section {
+                VStack(spacing: 12) {
+                    HStack {
+                        Image(systemName: "person.2.circle.fill")
+                            .foregroundColor(.green)
+                            .frame(width: 24)
+                        
+                        Text("Export your contact list as a public keybook or import contacts from other Whisper instances.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                    }
+                    
+                    VStack(spacing: 8) {
+                        Button(action: {
+                            viewModel.exportContacts()
+                        }) {
+                            HStack {
+                                Image(systemName: "square.and.arrow.up.fill")
+                                    .font(.title3)
+                                Text("Export Contacts")
+                            }
+                        }
+                        .buttonStyle(.exportImportAction(color: .green, isDisabled: viewModel.contacts.isEmpty))
+                        .disabled(viewModel.contacts.isEmpty)
+                        
+                        Button(action: {
+                            showingContactImport = true
+                        }) {
+                            HStack {
+                                Image(systemName: "square.and.arrow.down.fill")
+                                    .font(.title3)
+                                Text("Import Contacts")
+                            }
+                        }
+                        .buttonStyle(.exportImportAction(color: .green))
+                    }
                 }
-                .disabled(viewModel.identities.isEmpty)
-                
-                Text("Export public key bundles for sharing your identity with others.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            Section("Statistics") {
+                .padding(.vertical, 8)
+            } header: {
                 HStack {
-                    Text("Contacts")
-                    Spacer()
-                    Text("\(viewModel.contacts.count)")
-                        .foregroundColor(.secondary)
-                }
-                
-                HStack {
-                    Text("Identities")
-                    Spacer()
-                    Text("\(viewModel.identities.count)")
-                        .foregroundColor(.secondary)
-                }
-            }
-            
-            if let errorMessage = viewModel.errorMessage {
-                Section("Error") {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .font(.caption)
-                }
-            }
-            
-            if let successMessage = viewModel.successMessage {
-                Section("Success") {
-                    Text(successMessage)
+                    Image(systemName: "person.2.fill")
                         .foregroundColor(.green)
-                        .font(.caption)
+                    Text("Contacts")
+                        .font(.system(.subheadline, weight: .semibold))
                 }
+            }
+
+            // Public Key Bundles Section
+            Section {
+                VStack(spacing: 12) {
+                    HStack {
+                        Image(systemName: "key.horizontal.fill")
+                            .foregroundColor(.blue)
+                            .frame(width: 24)
+                        
+                        Text("Export your public keys for sharing, or import someone else's public key bundle to add them as a contact.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                    }
+                    
+                    VStack(spacing: 8) {
+                        Button(action: {
+                            showingIdentityExport = true
+                        }) {
+                            HStack {
+                                Image(systemName: "key.radiowaves.forward.fill")
+                                    .font(.title3)
+                                Text("Export Identity Public Keys")
+                            }
+                        }
+                        .buttonStyle(.exportImportAction(color: .blue, isDisabled: viewModel.identities.isEmpty))
+                        .disabled(viewModel.identities.isEmpty)
+                        
+                        Button(action: {
+                            showingPublicKeyImport = true
+                        }) {
+                            HStack {
+                                Image(systemName: "key.viewfinder")
+                                    .font(.title3)
+                                Text("Import Public Key Bundle")
+                            }
+                        }
+                        .buttonStyle(.exportImportAction(color: .blue))
+                    }
+                }
+                .padding(.vertical, 8)
+            } header: {
+                HStack {
+                    Image(systemName: "key.fill")
+                        .foregroundColor(.blue)
+                    Text("Public Key Bundles")
+                        .font(.system(.subheadline, weight: .semibold))
+                }
+            }
+
+            // Statistics Section
+            Section {
+                VStack(spacing: 12) {
+                    StatisticRowView(
+                        icon: "person.2.fill",
+                        iconColor: .green,
+                        title: "Contacts",
+                        value: "\(viewModel.contacts.count)"
+                    )
+                    
+                    StatisticRowView(
+                        icon: "person.crop.circle.fill",
+                        iconColor: .purple,
+                        title: "Identities",
+                        value: "\(viewModel.identities.count)"
+                    )
+                }
+                .padding(.vertical, 8)
+            } header: {
+                HStack {
+                    Image(systemName: "chart.bar.fill")
+                        .foregroundColor(.orange)
+                    Text("Statistics")
+                        .font(.system(.subheadline, weight: .semibold))
+                }
+            }
+
+            // Success Message Section
+            if let successMessage = viewModel.successMessage {
+                Section {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text(successMessage)
+                            .font(.subheadline)
+                            .foregroundColor(.green)
+                        Spacer()
+                    }
+                    .padding(12)
+                    .background(Color.green.opacity(0.1))
+                    .cornerRadius(8)
+                }
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            }
+
+            // Error Message Section
+            if let errorMessage = viewModel.errorMessage {
+                Section {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.red)
+                        Text(errorMessage)
+                            .font(.subheadline)
+                            .foregroundColor(.red)
+                        Spacer()
+                    }
+                    .padding(12)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(8)
+                }
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
             }
         }
         .navigationTitle("Export/Import")
-        .navigationBarTitleDisplayMode(.large)
-        .sheet(isPresented: $showingContactImport) {
-            ContactImportSheet { data in
-                viewModel.importContacts(data: data)
-            }
-        }
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingIdentityExport) {
-            IdentityExportSheet(
+            EnhancedIdentityExportSheet(
                 identities: viewModel.identities,
                 onExport: { identity in
                     viewModel.exportIdentityPublicBundle(identity: identity)
@@ -89,112 +251,157 @@ struct ExportImportView: View {
         ) { result in
             viewModel.handleContactImport(result: result)
         }
-        .onAppear {
-            viewModel.loadData()
-        }
-    }
-}
-
-struct ContactImportSheet: View {
-    @Environment(\.dismiss) private var dismiss
-    @State private var showingFilePicker = false
-    @State private var selectedData: Data?
-    
-    let onImport: (Data) -> Void
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section("Import Contacts") {
-                    Button("Select Contact File") {
-                        showingFilePicker = true
-                    }
-                    
-                    if selectedData != nil {
-                        HStack {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.green)
-                            Text("Contact file selected")
-                        }
-                    }
-                    
-                    Text("Select a JSON file containing exported contacts from another Whisper instance.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .navigationTitle("Import Contacts")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Import") {
-                        if let data = selectedData {
-                            onImport(data)
-                            dismiss()
-                        }
-                    }
-                    .disabled(selectedData == nil)
-                }
-            }
-        }
         .fileImporter(
-            isPresented: $showingFilePicker,
-            allowedContentTypes: [.json],
+            isPresented: $showingPublicKeyImport,
+            allowedContentTypes: [UTType(filenameExtension: "wpub") ?? .data],
             allowsMultipleSelection: false
         ) { result in
-            switch result {
-            case .success(let urls):
-                if let url = urls.first {
-                    do {
-                        selectedData = try Data(contentsOf: url)
-                    } catch {
-                        // Handle error
-                    }
-                }
-            case .failure:
-                break
+            viewModel.handlePublicKeyBundleImport(result: result)
+        }
+        .onAppear {
+            viewModel.loadDataAndClearMessages()
+        }
+        .sheet(isPresented: $viewModel.showingShareSheet) {
+            if let shareURL = viewModel.shareURL {
+                ShareSheet(items: [shareURL])
             }
         }
     }
 }
 
-struct IdentityExportSheet: View {
+struct StatisticRowView: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    let value: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: icon)
+                .foregroundColor(iconColor)
+                .frame(width: 20)
+            
+            Text(title)
+                .font(.subheadline)
+            
+            Spacer()
+            
+            Text(value)
+                .font(.system(.subheadline, weight: .semibold))
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+        }
+    }
+}
+
+struct EnhancedIdentityExportSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selectedIdentity: Identity?
     
     let identities: [Identity]
     let onExport: (Identity) -> Void
-    
+
     var body: some View {
         NavigationView {
-            Form {
-                Section("Select Identity") {
+            VStack(spacing: 24) {
+                // Header
+                VStack(spacing: 12) {
+                    Image(systemName: "key.radiowaves.forward.fill")
+                        .font(.system(size: 50))
+                        .foregroundColor(.blue)
+                    
+                    Text("Export Public Keys")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    Text("Share your public key bundle with others to allow them to send you encrypted messages")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+                .padding(.top, 20)
+                
+                // Select Identity Section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("SELECT IDENTITY")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
+                    
                     Picker("Identity", selection: $selectedIdentity) {
                         Text("Select an identity").tag(nil as Identity?)
                         ForEach(identities) { identity in
-                            VStack(alignment: .leading) {
-                                Text(identity.name)
-                                Text(identity.shortFingerprint)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .tag(identity as Identity?)
+                            Text(identity.name).tag(identity as Identity?)
                         }
                     }
                     .pickerStyle(.wheel)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                    
+                    // Show details of selected identity
+                    if let selected = selectedIdentity {
+                        VStack(spacing: 8) {
+                            HStack {
+                                Image(systemName: "key")
+                                    .foregroundColor(.blue)
+                                    .frame(width: 16)
+                                Text("Fingerprint:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text(selected.shortFingerprint)
+                                    .font(.system(.caption, design: .monospaced))
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            HStack {
+                                Image(systemName: "info.circle")
+                                    .foregroundColor(.green)
+                                    .frame(width: 16)
+                                Text("Status:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text(selected.status.displayName)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color(.systemBackground))
+                        .cornerRadius(8)
+                        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                    }
                 }
+                .padding(.horizontal)
                 
-                Section("Information") {
+                // Information Section
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(.blue)
+                        Text("Information")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }
+                    
                     Text("This will export the public key bundle for the selected identity. This can be shared with others to allow them to send you encrypted messages.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+                .padding(16)
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(12)
+                .padding(.horizontal)
+                
+                Spacer()
             }
             .navigationTitle("Export Public Keys")
             .navigationBarTitleDisplayMode(.inline)
@@ -204,7 +411,7 @@ struct IdentityExportSheet: View {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Export") {
                         if let identity = selectedIdentity {
@@ -212,6 +419,7 @@ struct IdentityExportSheet: View {
                             dismiss()
                         }
                     }
+                    .fontWeight(.semibold)
                     .disabled(selectedIdentity == nil)
                 }
             }

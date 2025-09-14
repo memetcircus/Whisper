@@ -96,7 +96,7 @@ class AddContactViewModel: ObservableObject {
     func parseQRData() {
         do {
             let bundle = try parsePublicKeyBundle(qrCodeData)
-            displayName = bundle.displayName
+            displayName = bundle.name
             x25519PublicKeyString = bundle.x25519PublicKey.base64EncodedString()
             if let ed25519Key = bundle.ed25519PublicKey {
                 ed25519PublicKeyString = ed25519Key.base64EncodedString()
@@ -163,7 +163,8 @@ class AddContactViewModel: ObservableObject {
         // Try to parse as simple key format
         if let publicKey = parsePublicKey(qrData) {
             return PublicKeyBundle(
-                displayName: "Scanned Contact",
+                id: UUID(),
+                name: "Scanned Contact",
                 x25519PublicKey: publicKey,
                 ed25519PublicKey: nil,
                 fingerprint: try Contact.generateFingerprint(from: publicKey),

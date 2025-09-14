@@ -6,6 +6,10 @@ class BackupRestoreViewModel: ObservableObject {
     @Published var identities: [Identity] = []
     @Published var errorMessage: String?
     @Published var successMessage: String?
+    @Published var shareURL: URL?
+    @Published var showingShareSheet = false
+    @Published var backupData: Data?
+    @Published var showingRestoreSheet = false
     
     private let identityManager: IdentityManager
     
@@ -34,18 +38,18 @@ class BackupRestoreViewModel: ObservableObject {
         do {
             let backupData = try identityManager.backupIdentity(identity, passphrase: passphrase)
             
-            // Save backup to Documents directory
-            let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let backupFileName = "whisper-backup-\(identity.name)-\(Date().timeIntervalSince1970).wbak"
-            let backupURL = documentsPath.appendingPathComponent(backupFileName)
+            // Create backup file in temporary directory for sharing
+            let tempDir = FileManager.default.temporaryDirectory
+            let backupFileName = "whisper-backup-\(identity.name.replacingOccurrences(of: " ", with: "-"))-\(Int(Date().timeIntervalSince1970)).wbak"
+            let backupURL = tempDir.appendingPathComponent(backupFileName)
             
             try backupData.write(to: backupURL)
             
-            successMessage = "Backup created successfully: \(backupFileName)"
+            successMessage = "Backup created successfully. Use the share button to save it."
             errorMessage = nil
             
-            // Share the backup file
-            shareBackupFile(url: backupURL)
+            // Trigger share sheet
+            shareBackupFile(url: backupURL, fileName: backupFileName)
             
         } catch {
             errorMessage = "Failed to create backup: \(error.localizedDescription)"
@@ -74,24 +78,46 @@ class BackupRestoreViewModel: ObservableObject {
         case .success(let urls):
             guard let url = urls.first else { return }
             
+            // Request access to the security-scoped resource
+            guard url.startAccessingSecurityScopedResource() else {
+                errorMessage = "Failed to access the selected file. Please try again."
+                return
+            }
+            
+            defer {
+                // Always stop accessing the resource when done
+                url.stopAccessingSecurityScopedResource()
+            }
+            
             do {
-                let backupData = try Data(contentsOf: url)
-                // For now, we'll just store the data and let the user enter the passphrase
-                // In a real implementation, we'd show the restore sheet here
+                let fileData = try Data(contentsOf: url)
+                print("📁 Successfully read backup file: \(url.lastPathComponent)")
+                print("📁 File size: \(fileData.count) bytes")
+                
+                // Store the backup data and show the restore sheet
+                self.backupData = fileData
+                showingRestoreSheet = true
+                
+                // Clear any previous messages
+                successMessage = nil
+                errorMessage = nil
                 
             } catch {
                 errorMessage = "Failed to read backup file: \(error.localizedDescription)"
+                successMessage = nil
             }
             
         case .failure(let error):
             errorMessage = "Failed to import file: \(error.localizedDescription)"
+            successMessage = nil
         }
     }
     
-    private func shareBackupFile(url: URL) {
-        // In a real implementation, we'd use UIActivityViewController
-        // For now, we'll just note that the file is available in Documents
-        print("Backup file available at: \(url.path)")
+    private func shareBackupFile(url: URL, fileName: String) {
+        shareURL = url
+        showingShareSheet = true
+        print("📁 Backup file created: \(fileName)")
+        print("📁 File location: \(url.path)")
     }
     
     private func clearMessages() {

@@ -4,55 +4,106 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = SettingsViewModel()
     @State private var showingLegalDisclaimer = false
-    
+
     var body: some View {
         NavigationView {
             List {
-                // Security Policies Section
-                Section("Security Policies") {
-                    Toggle("Contact Required to Send", isOn: $viewModel.contactRequiredToSend)
-                        .help("Blocks sending to raw keys, requires recipient selection from contacts")
-                    
-                    Toggle("Require Signature for Verified", isOn: $viewModel.requireSignatureForVerified)
-                        .help("Mandates signatures for all messages to verified contacts")
-                    
-                    Toggle("Auto-Archive on Rotation", isOn: $viewModel.autoArchiveOnRotation)
-                        .help("Automatically archives old identities after key rotation")
-                    
-                    Toggle("Biometric-Gated Signing", isOn: $viewModel.biometricGatedSigning)
-                        .help("Requires Face ID/Touch ID for every signature operation")
+                // Security Section
+                Section {
+                    SettingsToggleRow(
+                        icon: "arrow.clockwise.circle.fill",
+                        iconColor: .blue,
+                        title: "Auto-Archive on Rotation",
+                        description: "Automatically archives old identities after key rotation",
+                        isOn: $viewModel.autoArchiveOnRotation
+                    )
+                } header: {
+                    Text("Message Security")
+                } footer: {
+                    Text("Security settings that affect message encryption and key management.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-                
-                // Identity Management Section
-                Section("Identity Management") {
-                    NavigationLink("Manage Identities") {
+
+                // Identity & Keys Section
+                Section {
+                    SettingsNavigationRow(
+                        icon: "person.badge.key.fill",
+                        iconColor: .purple,
+                        title: "Manage Identities",
+                        description: "Create, rotate, and manage your encryption identities"
+                    ) {
                         IdentityManagementView()
                     }
-                    
-                    NavigationLink("Backup & Restore") {
+
+                    SettingsNavigationRow(
+                        icon: "externaldrive.fill",
+                        iconColor: .green,
+                        title: "Backup & Restore",
+                        description: "Backup your identities and restore from previous backups"
+                    ) {
                         BackupRestoreView()
                     }
+                } header: {
+                    Text("Identity Management")
+                } footer: {
+                    Text("Manage your encryption identities and create secure backups.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-                
-                // Biometric Settings Section
-                Section("Biometric Authentication") {
-                    NavigationLink("Biometric Settings") {
+
+                // Authentication Section
+                Section {
+                    SettingsNavigationRow(
+                        icon: "faceid",
+                        iconColor: .orange,
+                        title: "Face ID Settings",
+                        description: "Configure Face ID authentication for encryption"
+                    ) {
                         BiometricSettingsView()
                     }
+                } header: {
+                    Text("Face ID Authentication")
+                } footer: {
+                    Text("Use Face ID authentication to secure your encryption keys.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-                
-                // Data Management Section
-                Section("Data Management") {
-                    NavigationLink("Export/Import") {
+
+                // Data Section
+                Section {
+                    SettingsNavigationRow(
+                        icon: "square.and.arrow.up.fill",
+                        iconColor: .indigo,
+                        title: "Export/Import",
+                        description: "Share public keys and import contacts"
+                    ) {
                         ExportImportView()
                     }
+                } header: {
+                    Text("Data Management")
+                } footer: {
+                    Text("Export your public keys to share with contacts or import theirs.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-                
+
                 // Legal Section
-                Section("Legal") {
-                    Button("View Legal Disclaimer") {
+                Section {
+                    SettingsActionRow(
+                        icon: "doc.text.fill",
+                        iconColor: .gray,
+                        title: "View Legal Disclaimer",
+                        description: "Privacy policy and terms of use"
+                    ) {
                         showingLegalDisclaimer = true
                     }
+                } header: {
+                    Text("Legal")
+                } footer: {
+                    Text("Review the legal disclaimer and privacy information.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             }
             .navigationTitle("Settings")
@@ -62,12 +113,129 @@ struct SettingsView: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .font(.system(size: 16, weight: .medium))
                 }
             }
         }
         .sheet(isPresented: $showingLegalDisclaimer) {
             LegalDisclaimerView(isFirstLaunch: false)
         }
+    }
+}
+
+// MARK: - Settings Row Components
+
+struct SettingsNavigationRow<Destination: View>: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    let description: String
+    let destination: () -> Destination
+
+    var body: some View {
+        NavigationLink(destination: destination) {
+            HStack(spacing: 12) {
+                // Icon
+                Image(systemName: icon)
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundColor(.white)
+                    .frame(width: 32, height: 32)
+                    .background(iconColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                // Content
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.primary)
+
+                    Text(description)
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                }
+
+                Spacer()
+            }
+            .padding(.vertical, 4)
+        }
+    }
+}
+
+struct SettingsToggleRow: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    let description: String
+    @Binding var isOn: Bool
+
+    var body: some View {
+        HStack(spacing: 12) {
+            // Icon
+            Image(systemName: icon)
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(.white)
+                .frame(width: 32, height: 32)
+                .background(iconColor)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            // Content
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.primary)
+
+                Text(description)
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+            }
+
+            Spacer()
+
+            // Toggle
+            Toggle("", isOn: $isOn)
+                .labelsHidden()
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+struct SettingsActionRow: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    let description: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                // Icon
+                Image(systemName: icon)
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundColor(.white)
+                    .frame(width: 32, height: 32)
+                    .background(iconColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                // Content
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.primary)
+
+                    Text(description)
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                }
+
+                Spacer()
+            }
+            .padding(.vertical, 4)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

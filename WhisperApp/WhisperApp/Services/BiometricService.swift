@@ -1,7 +1,7 @@
-import Foundation
-import Security
 import CryptoKit
+import Foundation
 import LocalAuthentication
+import Security
 
 // MARK: - BiometricService Protocol
 
@@ -11,14 +11,14 @@ protocol BiometricService {
     /// Checks if biometric authentication is available on the device
     /// - Returns: True if Face ID or Touch ID is available and enrolled
     func isAvailable() -> Bool
-    
+
     /// Enrolls a signing key with biometric protection in the Keychain
     /// - Parameters:
     ///   - key: The Ed25519 private key to enroll
     ///   - id: Unique identifier for the key
     /// - Throws: BiometricError if enrollment fails
     func enrollSigningKey(_ key: Curve25519.Signing.PrivateKey, id: String) throws
-    
+
     /// Signs data using a biometric-protected key
     /// - Parameters:
     ///   - data: Data to sign
@@ -26,12 +26,12 @@ protocol BiometricService {
     /// - Returns: The signature data
     /// - Throws: BiometricError if signing fails or user cancels
     func sign(data: Data, keyId: String) async throws -> Data
-    
+
     /// Removes a biometric-protected signing key
     /// - Parameter keyId: Identifier of the key to remove
     /// - Throws: BiometricError if removal fails
     func removeSigningKey(keyId: String) throws
-    
+
     /// Gets the type of biometric authentication available
     /// - Returns: The biometry type (Face ID, Touch ID, or none)
     func biometryType() -> LABiometryType
@@ -50,7 +50,7 @@ enum BiometricError: Error, LocalizedError {
     case authenticationFailed
     case biometryNotEnrolled
     case biometryLockout
-    
+
     var errorDescription: String? {
         switch self {
         case .notAvailable:
@@ -73,7 +73,7 @@ enum BiometricError: Error, LocalizedError {
             return "Biometric authentication is locked out"
         }
     }
-    
+
     /// Converts BiometricError to WhisperError for policy enforcement
     var asWhisperError: WhisperError {
         switch self {
@@ -92,58 +92,61 @@ enum BiometricError: Error, LocalizedError {
 /// Implementation of BiometricService using iOS Keychain and LocalAuthentication
 /// Provides secure biometric-protected signing operations without exposing private keys
 class KeychainBiometricService: BiometricService {
-    
+
     // MARK: - Constants
-    
+
     private static let keyPrefix = "biometric-signing"
     private static let authenticationPrompt = "Authenticate to sign message"
-    
+
     // MARK: - Biometric Availability
-    
+
     func isAvailable() -> Bool {
         let context = LAContext()
         var error: NSError?
-        
-        return context.canEvaluatePolicy(.biometryCurrentSet, error: &error)
+
+        return context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
     }
-    
+
     func biometryType() -> LABiometryType {
         let context = LAContext()
         var error: NSError?
-        
-        guard context.canEvaluatePolicy(.biometryCurrentSet, error: &error) else {
+
+        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        else {
             return .none
         }
-        
+
         return context.biometryType
     }
-    
+
     // MARK: - Key Enrollment
-    
+
     func enrollSigningKey(_ key: Curve25519.Signing.PrivateKey, id: String) throws {
         guard isAvailable() else {
             throw BiometricError.notAvailable
         }
-        
+
+        // Let the keychain operation handle biometric authentication
+
         let keyData = key.rawRepresentation
         let keyTag = "\(Self.keyPrefix)-\(id)".data(using: .utf8)!
-        
+
         // Create access control requiring biometric authentication
-        var error: Unmanaged<CFError>?
+        var accessControlError: Unmanaged<CFError>?
         let accessControl = SecAccessControlCreateWithFlags(
             kCFAllocatorDefault,
             kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-            [.biometryCurrentSet, .privateKeyUsage],
-            &error
+            .biometryAny,
+            &accessControlError
         )
-        
+
         guard let accessControl = accessControl else {
             throw BiometricError.enrollmentFailed(errSecParam)
         }
-        
+
         // Remove existing key if present
         try? removeSigningKey(keyId: id)
-        
+
         // Store the key with biometric protection
         let query: [String: Any] = [
             kSecClass as String: kSecClassKey,
@@ -153,102 +156,110 @@ class KeychainBiometricService: BiometricService {
             kSecAttrKeySizeInBits as String: 256,
             kSecAttrAccessControl as String: accessControl,
             kSecValueData as String: keyData,
-            kSecAttrSynchronizable as String: false // Never sync to iCloud
+            kSecAttrSynchronizable as String: false,  // Never sync to iCloud
         ]
-        
+
         let status = SecItemAdd(query as CFDictionary, nil)
-        
+
         // Securely clear the key data from memory
         keyData.withUnsafeBytes { bytes in
-            memset_s(UnsafeMutableRawPointer(mutating: bytes.baseAddress), bytes.count, 0, bytes.count)
+            memset_s(
+                UnsafeMutableRawPointer(mutating: bytes.baseAddress), bytes.count, 0, bytes.count)
         }
-        
+
         guard status == errSecSuccess else {
             throw BiometricError.enrollmentFailed(status)
         }
     }
-    
+
     // MARK: - Signing Operations
-    
+
     func sign(data: Data, keyId: String) async throws -> Data {
         guard isAvailable() else {
             throw BiometricError.notAvailable
         }
-        
+
         let keyTag = "\(Self.keyPrefix)-\(keyId)".data(using: .utf8)!
-        
+
+        // Create authentication context with localized reason
+        let context = LAContext()
+        context.localizedReason = Self.authenticationPrompt
+
         // Query for the biometric-protected key
         let query: [String: Any] = [
             kSecClass as String: kSecClassKey,
             kSecAttrApplicationTag as String: keyTag,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecUseOperationPrompt as String: Self.authenticationPrompt
+            kSecUseAuthenticationContext as String: context,
         ]
-        
+
         return try await withCheckedThrowingContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async {
                 var result: CFTypeRef?
                 let status = SecItemCopyMatching(query as CFDictionary, &result)
-                
+
                 switch status {
                 case errSecSuccess:
                     guard let keyData = result as? Data else {
                         continuation.resume(throwing: BiometricError.invalidKeyData)
                         return
                     }
-                    
+
                     do {
                         // Create the private key from the retrieved data
-                        let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: keyData)
-                        
+                        let privateKey = try Curve25519.Signing.PrivateKey(
+                            rawRepresentation: keyData)
+
                         // Sign the data
                         let signature = try privateKey.signature(for: data)
-                        
+
                         // Securely clear the key data from memory
                         keyData.withUnsafeBytes { bytes in
-                            memset_s(UnsafeMutableRawPointer(mutating: bytes.baseAddress), bytes.count, 0, bytes.count)
+                            memset_s(
+                                UnsafeMutableRawPointer(mutating: bytes.baseAddress), bytes.count,
+                                0, bytes.count)
                         }
-                        
+
                         continuation.resume(returning: Data(signature))
                     } catch {
                         continuation.resume(throwing: BiometricError.signingFailed(errSecParam))
                     }
-                    
-                case errSecUserCancel:
+
+                case -128:  // errSecUserCancel
                     continuation.resume(throwing: BiometricError.userCancelled)
-                    
+
                 case errSecAuthFailed:
                     continuation.resume(throwing: BiometricError.authenticationFailed)
-                    
-                case errSecBiometryNotAvailable:
+
+                case -25291:  // errSecBiometryNotAvailable
                     continuation.resume(throwing: BiometricError.biometryNotEnrolled)
-                    
-                case errSecBiometryLockout:
+
+                case -25293:  // errSecBiometryLockout
                     continuation.resume(throwing: BiometricError.biometryLockout)
-                    
+
                 case errSecItemNotFound:
                     continuation.resume(throwing: BiometricError.keyNotFound)
-                    
+
                 default:
                     continuation.resume(throwing: BiometricError.signingFailed(status))
                 }
             }
         }
     }
-    
+
     // MARK: - Key Management
-    
+
     func removeSigningKey(keyId: String) throws {
         let keyTag = "\(Self.keyPrefix)-\(keyId)".data(using: .utf8)!
-        
+
         let query: [String: Any] = [
             kSecClass as String: kSecClassKey,
-            kSecAttrApplicationTag as String: keyTag
+            kSecAttrApplicationTag as String: keyTag,
         ]
-        
+
         let status = SecItemDelete(query as CFDictionary)
-        
+
         guard status == errSecSuccess || status == errSecItemNotFound else {
             throw BiometricError.enrollmentFailed(status)
         }
@@ -258,7 +269,7 @@ class KeychainBiometricService: BiometricService {
 // MARK: - Policy Integration
 
 extension KeychainBiometricService {
-    
+
     /// Signs data with policy enforcement
     /// Integrates with PolicyManager to enforce biometric gating policy
     /// - Parameters:
@@ -267,16 +278,18 @@ extension KeychainBiometricService {
     ///   - policyManager: Policy manager to check biometric requirements
     /// - Returns: The signature data
     /// - Throws: WhisperError.policyViolation(.biometricRequired) if policy requires biometric but user cancels
-    func signWithPolicyEnforcement(data: Data, 
-                                 keyId: String, 
-                                 policyManager: PolicyManager) async throws -> Data {
-        
+    func signWithPolicyEnforcement(
+        data: Data,
+        keyId: String,
+        policyManager: PolicyManager
+    ) async throws -> Data {
+
         // Check if biometric gating is required by policy
         if policyManager.requiresBiometricForSigning() {
             guard isAvailable() else {
                 throw WhisperError.policyViolation(.biometricRequired)
             }
-            
+
             do {
                 return try await sign(data: data, keyId: keyId)
             } catch let error as BiometricError {

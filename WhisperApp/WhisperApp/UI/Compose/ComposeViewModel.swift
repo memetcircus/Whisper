@@ -1,148 +1,185 @@
-import SwiftUI
-import Foundation
+import Combine
+import CoreData
 import CryptoKit
+import Foundation
+import LocalAuthentication
+import SwiftUI
+
+#if canImport(UIKit)
+    import UIKit
+#endif
 
 // MARK: - Type Definitions
 
-/// Represents a cryptographic identity with key pairs and metadata
-struct Identity {
-    let id: UUID
-    let name: String
-    let x25519KeyPair: X25519KeyPair
-    let ed25519KeyPair: Ed25519KeyPair?
-    let fingerprint: Data
-    let createdAt: Date
-    let status: IdentityStatus
-    let keyVersion: Int
-}
-
-/// Status of a cryptographic identity
-enum IdentityStatus {
-    case active
-    case archived
-    case rotated
-}
-
-/// X25519 key pair for key agreement
-struct X25519KeyPair {
-    let privateKey: Curve25519.KeyAgreement.PrivateKey
-    let publicKey: Data
-}
-
-/// Ed25519 key pair for signing
-struct Ed25519KeyPair {
-    let privateKey: Curve25519.Signing.PrivateKey
-    let publicKey: Data
-}
-
-/// Public key bundle for sharing identities
-struct PublicKeyBundle: Codable {
-    let id: UUID
-    let name: String
-    let x25519PublicKey: Data
-    let ed25519PublicKey: Data?
-    let fingerprint: Data
-    let keyVersion: Int
-    let createdAt: Date
-}
-
-/// Identity management errors
-enum IdentityError: Error {
-    case noActiveIdentity
-    case invalidBundleFormat(Error)
-}
+// QRCodeService and QRCodeResult are defined in QRCodeService.swift
 
 /// ViewModel for the compose view that handles encryption logic and policy enforcement
 @MainActor
 class ComposeViewModel: ObservableObject {
-    
+    // MARK: - Constants
+    private let maxCharacterLimit = 40000
+
     // MARK: - Published Properties
-    
     @Published var messageText: String = ""
     @Published var selectedContact: Contact?
-    @Published var includeSignature: Bool = false
+
     @Published var activeIdentity: Identity?
     @Published var encryptedMessage: String?
-    
+
     // UI State
     @Published var showingContactPicker: Bool = false
+    @Published var showingIdentityPicker: Bool = false
     @Published var showingError: Bool = false
     @Published var showingBiometricPrompt: Bool = false
     @Published var showingQRCode: Bool = false
     @Published var showingShareSheet: Bool = false
     @Published var errorMessage: String = ""
     @Published var qrCodeResult: QRCodeResult?
-    
+    @Published var availableIdentities: [Identity] = []
+
     // MARK: - Dependencies
-    
     private let whisperService: WhisperService
     private let identityManager: IdentityManager
     private let contactManager: ContactManager
     private let policyManager: PolicyManager
     private let qrCodeService: QRCodeService
-    
+
     // MARK: - Computed Properties
-    
     var canEncrypt: Bool {
-        !messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-        activeIdentity != nil &&
-        (selectedContact != nil || !isContactRequired)
+        !messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && activeIdentity != nil && selectedContact != nil
     }
-    
+
+    var showEncryptButton: Bool {
+        encryptedMessage == nil
+    }
+
+    var showPostEncryptionButtons: Bool {
+        encryptedMessage != nil
+    }
+
+    var characterCount: Int {
+        messageText.count
+    }
+
+    var remainingCharacters: Int {
+        maxCharacterLimit - messageText.count
+    }
+
     var isContactRequired: Bool {
         policyManager.contactRequiredToSend
     }
-    
-    var isSignatureRequired: Bool {
-        guard let contact = selectedContact else { return false }
-        return policyManager.requireSignatureForVerified && contact.trustLevel == .verified
+
+    // MARK: - Methods
+    func updateMessageText(_ newText: String) {
+        let limitedText = String(newText.prefix(maxCharacterLimit))
+        messageText = limitedText
     }
-    
+
     // MARK: - Initialization
-    
-    init(whisperService: WhisperService = ServiceContainer.shared.whisperService,
-         identityManager: IdentityManager = ServiceContainer.shared.identityManager,
-         contactManager: ContactManager = ServiceContainer.shared.contactManager,
-         policyManager: PolicyManager = ServiceContainer.shared.policyManager,
-         qrCodeService: QRCodeService = QRCodeService()) {
-        
-        self.whisperService = whisperService
-        self.identityManager = identityManager
-        self.contactManager = contactManager
-        self.policyManager = policyManager
+    init(
+        whisperService: WhisperService? = nil,
+        identityManager: IdentityManager? = nil,
+        contactManager: ContactManager? = nil,
+        policyManager: PolicyManager? = nil,
+        qrCodeService: QRCodeService = QRCodeService()
+    ) {
+
+        // Use real services from ServiceContainer if not provided
+        self.whisperService = whisperService ?? ServiceContainer.shared.whisperService
+        self.identityManager = identityManager ?? ServiceContainer.shared.identityManager
+        self.contactManager = contactManager ?? ServiceContainer.shared.contactManager
+        self.policyManager = policyManager ?? ServiceContainer.shared.policyManager
         self.qrCodeService = qrCodeService
-        
+
         loadActiveIdentity()
-        updateSignatureRequirement()
+
+        // Clear encrypted message when message text or contact changes
+        $messageText.dropFirst()  // Skip initial value
+            .sink { [weak self] _ in
+                self?.clearEncryptedMessage()
+            }
+            .store(in: &cancellables)
+
+        $selectedContact.dropFirst()  // Skip initial value
+            .sink { [weak self] _ in
+                self?.clearEncryptedMessage()
+            }
+            .store(in: &cancellables)
     }
-    
+
+    private var cancellables = Set<AnyCancellable>()
+
+    private func clearEncryptedMessage() {
+        encryptedMessage = nil
+        qrCodeResult = nil
+        showingQRCode = false
+        showingShareSheet = false
+    }
+
     // MARK: - Public Methods
     
+    /// Simple biometric authentication for user verification
+    private func authenticateWithBiometrics() async throws -> Bool {
+        return try await withCheckedThrowingContinuation { continuation in
+            let context = LAContext()
+            let reason = "Authenticate to encrypt message"
+            
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: success)
+                }
+            }
+        }
+    }
     func encryptMessage() async {
         guard let identity = activeIdentity else {
             showError("No active identity selected")
             return
         }
-        
+
         guard !messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             showError("Message cannot be empty")
             return
         }
-        
+
+        // Check if contact is required but not selected
+        guard selectedContact != nil || !isContactRequired else {
+            showError("Please select a contact to encrypt the message")
+            return
+        }
+
+        // Check if biometric authentication is required
+        let policyManager = ServiceContainer.shared.policyManager
+        if policyManager.requiresBiometricForSigning() {
+            do {
+                let success = try await authenticateWithBiometrics()
+                if !success {
+                    showError("Biometric authentication failed")
+                    return
+                }
+            } catch {
+                showError("Biometric authentication failed: \(error.localizedDescription)")
+                return
+            }
+        }
+
         let messageData = messageText.data(using: .utf8)!
-        let shouldSign = includeSignature || isSignatureRequired
         
+        // Use normal signing behavior (not related to biometric authentication)
+        let shouldSign = false  // Keep signatures disabled for now
+
         do {
             let envelope: String
-            
             if let contact = selectedContact {
                 // Encrypt to contact
                 envelope = try await whisperService.encrypt(
                     messageData,
                     from: identity,
                     to: contact,
-                    authenticity: shouldSign
-                )
+                    authenticity: shouldSign)
             } else {
                 // This should not happen if policies are enforced correctly
                 // But we'll handle raw key encryption for completeness
@@ -150,46 +187,65 @@ class ComposeViewModel: ObservableObject {
                     showError("Contact selection is required by policy")
                     return
                 }
-                
+
                 // For now, we don't support raw key input in this implementation
-                showError("Raw key encryption not implemented in this view")
+                showError("Please select a contact from your contact list to encrypt the message")
                 return
             }
-            
+
             encryptedMessage = envelope
-            
         } catch let error as WhisperError {
             handleWhisperError(error)
         } catch {
             showError("Encryption failed: \(error.localizedDescription)")
         }
     }
-    
+
     func copyToClipboard() {
         guard let message = encryptedMessage else { return }
-        
-        UIPasteboard.general.string = message
-        
+
+        // Copy to clipboard
+        #if canImport(UIKit)
+            UIPasteboard.general.string = message
+        #endif
+
         // Show brief success feedback
         withAnimation {
-            // You could add a success state here
+            // Could add a success toast here in the future
+            print("✅ Copied encrypted message to clipboard")
         }
     }
-    
+
     func showIdentityPicker() {
-        // TODO: Implement identity picker
-        // For now, just reload the active identity
-        loadActiveIdentity()
+        // Load all available identities
+        availableIdentities = identityManager.listIdentities()
+        print(
+            "🔍 Loaded \(availableIdentities.count) identities: \(availableIdentities.map { $0.name })"
+        )
+        showingIdentityPicker = true
     }
-    
+
+    func selectIdentity(_ identity: Identity) {
+        do {
+            try identityManager.setActiveIdentity(identity)
+            activeIdentity = identity
+            showingIdentityPicker = false
+            clearEncryptedMessage()  // Clear any existing encrypted message
+            print("✅ Selected identity: \(identity.name)")
+        } catch {
+            print("❌ Failed to select identity: \(error)")
+            showError("Failed to select identity: \(error.localizedDescription)")
+        }
+    }
+
     func showRawKeyInput() {
         // TODO: Implement raw key input dialog
         // This would show a text field for entering a raw X25519 public key
     }
-    
+
     func showQRCode() {
         guard let envelope = encryptedMessage else { return }
-        
+
         do {
             let result = try qrCodeService.generateQRCode(for: envelope)
             qrCodeResult = result
@@ -198,30 +254,58 @@ class ComposeViewModel: ObservableObject {
             showError("Failed to generate QR code: \(error.localizedDescription)")
         }
     }
-    
+
     func cancelBiometricAuth() {
         showingBiometricPrompt = false
         // The encryption operation will fail with biometric cancellation
     }
-    
-    // MARK: - Private Methods
-    
-    private func loadActiveIdentity() {
-        activeIdentity = identityManager.getActiveIdentity()
+
+    func handleSharingCompleted() {
+        // Called when sharing is completed
+        // This can be used for analytics, cleanup, or other post-sharing actions
+        print("✅ Message sharing completed successfully")
+
+        // Optional: Clear the encrypted message after sharing
+        // clearEncryptedMessage()
     }
-    
-    private func updateSignatureRequirement() {
-        // Update signature toggle based on policy and selected contact
-        if isSignatureRequired {
-            includeSignature = true
+
+    // MARK: - Private Methods
+    private func loadActiveIdentity() {
+        // Load initial active identity - prefer active status over archived
+        do {
+            let allIdentities = identityManager.listIdentities()
+
+            // First try to get the currently active identity
+            if let currentActive = identityManager.getActiveIdentity(),
+                currentActive.status == .active
+            {
+                activeIdentity = currentActive
+            } else {
+                // If no active identity or current active is archived,
+                // select the first active (non-archived) identity
+                activeIdentity = allIdentities.first { $0.status == .active }
+
+                // If we found a better active identity, set it as the active one
+                if let betterIdentity = activeIdentity {
+                    try identityManager.setActiveIdentity(betterIdentity)
+                }
+            }
+
+            print(
+                "🔍 Selected identity: \(activeIdentity?.name ?? "none") (status: \(activeIdentity?.status.rawValue ?? "none"))"
+            )
+        } catch {
+            print("❌ Failed to load active identity: \(error)")
+            // Fallback to simple approach
+            activeIdentity = identityManager.getActiveIdentity()
         }
     }
-    
+
     private func showError(_ message: String) {
         errorMessage = message
         showingError = true
     }
-    
+
     private func handleWhisperError(_ error: WhisperError) {
         switch error {
         case .policyViolation(let type):
@@ -230,7 +314,6 @@ class ComposeViewModel: ObservableObject {
                 showError("Contact selection is required by your security policy")
             case .signatureRequired:
                 showError("Signature is required for verified contacts")
-                includeSignature = true
             case .biometricRequired:
                 showingBiometricPrompt = true
             }
@@ -239,194 +322,153 @@ class ComposeViewModel: ObservableObject {
         case .keyNotFound:
             showError("Signing key not found. Please check your identity configuration.")
         default:
-            showError(error.userFacingMessage)
+            showError(error.localizedDescription)
         }
     }
-    
+
     private func requiresBiometricForSigning() -> Bool {
         return policyManager.requiresBiometricForSigning()
     }
-    
+
     private func handleUserCancelled() {
         showError("Biometric authentication was cancelled")
     }
 }
 
-// MARK: - Contact Picker ViewModel
-
-@MainActor
-class ContactPickerViewModel: ObservableObject {
-    @Published var contacts: [Contact] = []
-    
-    private let contactManager: ContactManager
-    
-    init(contactManager: ContactManager = ServiceContainer.shared.contactManager) {
-        self.contactManager = contactManager
-    }
-    
-    func loadContacts() {
-        // Load all non-blocked contacts
-        contacts = contactManager.listContacts().filter { !$0.isBlocked }
-    }
-}
-
 // MARK: - Service Container
-
-/// Simple service container for dependency injection
-/// In a real app, this would be more sophisticated
-class ServiceContainer {
-    static let shared = ServiceContainer()
-    
-    private init() {}
-    
-    // MARK: - Service Properties
-    
-    lazy var whisperService: WhisperService = {
-        // For now, return a mock implementation
-        return MockWhisperService()
-    }()
-    
-    lazy var identityManager: IdentityManager = {
-        // For now, return a mock implementation
-        return MockIdentityManager()
-    }()
-    
-    lazy var contactManager: ContactManager = {
-        // For now, return a mock implementation
-        return MockContactManager()
-    }()
-    
-    lazy var policyManager: PolicyManager = {
-        return UserDefaultsPolicyManager()
-    }()
-}
+// ServiceContainer is now defined in Services/ServiceContainer.swift
 
 // MARK: - Mock Implementations
-
-/// Mock WhisperService for UI development
-class MockWhisperService: WhisperService {
-    func encrypt(_ data: Data, from identity: Identity, to peer: Contact, authenticity: Bool) async throws -> String {
-        // Simulate encryption delay
-        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
-        
-        // Return a mock envelope
-        return "whisper1:v1.c20p.ABC123DEF456.01.EPHEMERAL_KEY.SALT.MSGID.TIMESTAMP.CIPHERTEXT.SIGNATURE"
-    }
-    
-    func encryptToRawKey(_ data: Data, from identity: Identity, to publicKey: Data, authenticity: Bool) async throws -> String {
-        // Simulate encryption delay
-        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
-        
-        // Return a mock envelope
-        return "whisper1:v1.c20p.ABC123DEF456.01.EPHEMERAL_KEY.SALT.MSGID.TIMESTAMP.CIPHERTEXT.SIGNATURE"
-    }
-    
-    func decrypt(_ envelope: String) async throws -> DecryptionResult {
-        throw WhisperError.invalidEnvelope
-    }
-    
-    func detect(_ text: String) -> Bool {
-        return text.contains("whisper1:")
-    }
-}
+// MockWhisperService removed - now using real encryption/decryption services
 
 /// Mock IdentityManager for UI development
 class MockIdentityManager: IdentityManager {
-    private var activeIdentity: Identity? = Identity(
-        id: UUID(),
-        name: "My Identity",
-        x25519KeyPair: X25519KeyPair(
-            privateKey: try! Curve25519.KeyAgreement.PrivateKey(rawRepresentation: Data(repeating: 1, count: 32)),
-            publicKey: Data(repeating: 1, count: 32)
-        ),
-        ed25519KeyPair: Ed25519KeyPair(
-            privateKey: try! Curve25519.Signing.PrivateKey(rawRepresentation: Data(repeating: 2, count: 32)),
-            publicKey: Data(repeating: 2, count: 32)
-        ),
-        fingerprint: Data(repeating: 3, count: 32),
-        createdAt: Date(),
-        status: .active,
-        keyVersion: 1
-    )
-    
+    private var allIdentities: [Identity] = {
+        // Create multiple mock identities to match what user has in settings
+        var identities: [Identity] = []
+
+        // Makif (Active)
+        let makifPrivateKey = try! Curve25519.KeyAgreement.PrivateKey(
+            rawRepresentation: Data(repeating: 1, count: 32))
+        let makifEd25519Key = try! Curve25519.Signing.PrivateKey(
+            rawRepresentation: Data(repeating: 2, count: 32))
+        let makif = Identity(
+            id: UUID(),
+            name: "Makif",
+            x25519KeyPair: X25519KeyPair(
+                privateKey: makifPrivateKey, publicKey: Data(repeating: 1, count: 32)),
+            ed25519KeyPair: Ed25519KeyPair(
+                privateKey: makifEd25519Key, publicKey: Data(repeating: 2, count: 32)),
+            fingerprint: Data(repeating: 3, count: 32),
+            createdAt: Date(timeIntervalSinceNow: -86400 * 30),  // 30 days ago
+            status: .active,
+            keyVersion: 1
+        )
+        identities.append(makif)
+
+        // Work
+        let workPrivateKey = try! Curve25519.KeyAgreement.PrivateKey(
+            rawRepresentation: Data(repeating: 4, count: 32))
+        let workEd25519Key = try! Curve25519.Signing.PrivateKey(
+            rawRepresentation: Data(repeating: 5, count: 32))
+        let work = Identity(
+            id: UUID(),
+            name: "Work",
+            x25519KeyPair: X25519KeyPair(
+                privateKey: workPrivateKey, publicKey: Data(repeating: 4, count: 32)),
+            ed25519KeyPair: Ed25519KeyPair(
+                privateKey: workEd25519Key, publicKey: Data(repeating: 5, count: 32)),
+            fingerprint: Data(repeating: 6, count: 32),
+            createdAt: Date(timeIntervalSinceNow: -86400 * 20),  // 20 days ago
+            status: .active,
+            keyVersion: 1
+        )
+        identities.append(work)
+
+        // Home
+        let homePrivateKey = try! Curve25519.KeyAgreement.PrivateKey(
+            rawRepresentation: Data(repeating: 7, count: 32))
+        let homeEd25519Key = try! Curve25519.Signing.PrivateKey(
+            rawRepresentation: Data(repeating: 8, count: 32))
+        let home = Identity(
+            id: UUID(),
+            name: "Home",
+            x25519KeyPair: X25519KeyPair(
+                privateKey: homePrivateKey, publicKey: Data(repeating: 7, count: 32)),
+            ed25519KeyPair: Ed25519KeyPair(
+                privateKey: homeEd25519Key, publicKey: Data(repeating: 8, count: 32)),
+            fingerprint: Data(repeating: 9, count: 32),
+            createdAt: Date(timeIntervalSinceNow: -86400 * 10),  // 10 days ago
+            status: .active,
+            keyVersion: 1
+        )
+        identities.append(home)
+
+        return identities
+    }()
+
+    private var activeIdentityId: UUID?
+
+    init() {
+        // Set the first identity (Makif) as active by default
+        activeIdentityId = allIdentities.first?.id
+    }
+
     func createIdentity(name: String) throws -> Identity {
         throw IdentityError.noActiveIdentity
     }
-    
+
     func listIdentities() -> [Identity] {
-        return activeIdentity.map { [$0] } ?? []
+        return allIdentities
     }
-    
+
     func getActiveIdentity() -> Identity? {
-        return activeIdentity
+        if let activeId = activeIdentityId {
+            return allIdentities.first { $0.id == activeId }
+        }
+        // Default to first identity if none is set
+        return allIdentities.first
     }
-    
-    func setActiveIdentity(_ identity: Identity) throws {}
+
+    func setActiveIdentity(_ identity: Identity) throws {
+        guard allIdentities.contains(where: { $0.id == identity.id }) else {
+            throw IdentityError.noActiveIdentity
+        }
+        activeIdentityId = identity.id
+    }
+
     func archiveIdentity(_ identity: Identity) throws {}
+
     func rotateActiveIdentity() throws -> Identity { throw IdentityError.noActiveIdentity }
+
     func exportPublicBundle(_ identity: Identity) throws -> Data { return Data() }
-    func importPublicBundle(_ data: Data) throws -> PublicKeyBundle { throw IdentityError.invalidBundleFormat(NSError()) }
+
+    func importPublicBundle(_ data: Data) throws -> PublicKeyBundle {
+        throw IdentityError.invalidBundleFormat(NSError())
+    }
+
     func backupIdentity(_ identity: Identity, passphrase: String) throws -> Data { return Data() }
-    func restoreIdentity(from backup: Data, passphrase: String) throws -> Identity { throw IdentityError.noActiveIdentity }
+
+    func restoreIdentity(from backup: Data, passphrase: String) throws -> Identity {
+        throw IdentityError.noActiveIdentity
+    }
+
     func getIdentity(byRkid rkid: Data) -> Identity? { return nil }
+
     func getIdentitiesNeedingRotationWarning() -> [Identity] { return [] }
+
+    func deleteIdentity(_ identity: Identity) throws {
+        // Mock implementation - just remove from array
+        allIdentities.removeAll { $0.id == identity.id }
+        if activeIdentityId == identity.id {
+            activeIdentityId = allIdentities.first?.id
+        }
+    }
 }
 
-/// Mock ContactManager for UI development
-class MockContactManager: ContactManager {
-    private var contacts: [Contact] = [
-        try! Contact(id: UUID(), displayName: "Alice", x25519PublicKey: Data(repeating: 4, count: 32)),
-        try! Contact(id: UUID(), displayName: "Bob", x25519PublicKey: Data(repeating: 5, count: 32)),
-        try! Contact(id: UUID(), displayName: "Charlie", x25519PublicKey: Data(repeating: 6, count: 32))
-    ]
-    
-    func addContact(_ contact: Contact) throws {}
-    func updateContact(_ contact: Contact) throws {}
-    func deleteContact(id: UUID) throws {}
-    func getContact(id: UUID) -> Contact? { return nil }
-    func getContact(byRkid rkid: Data) -> Contact? { return nil }
-    func listContacts() -> [Contact] { return contacts }
-    func searchContacts(query: String) -> [Contact] { return contacts }
-    func verifyContact(id: UUID, sasConfirmed: Bool) throws {}
-    func blockContact(id: UUID) throws {}
-    func unblockContact(id: UUID) throws {}
-    func exportPublicKeybook() throws -> Data { return Data() }
-    func handleKeyRotation(for contact: Contact, newX25519Key: Data, newEd25519Key: Data?) throws {}
-    func checkForKeyRotation(contact: Contact, currentX25519Key: Data) -> Bool { return false }
-}
+// UserDefaultsPolicyManager is defined in PolicyManager.swift
+// MockContactManager is defined in ContactListViewModel.swift
 
 // MARK: - Extensions
-
-extension TrustLevel {
-    var badgeColor: String {
-        switch self {
-        case .unverified:
-            return "orange"
-        case .verified:
-            return "green"
-        case .revoked:
-            return "red"
-        }
-    }
-}
-
-extension WhisperError {
-    var userFacingMessage: String {
-        switch self {
-        case .invalidEnvelope:
-            return "Invalid envelope"
-        case .replayDetected:
-            return "Replay detected"
-        case .messageExpired:
-            return "Message expired"
-        case .messageNotForMe:
-            return "This message is not addressed to you"
-        case .policyViolation(let type):
-            return type.userFacingMessage
-        case .biometricAuthenticationFailed:
-            return "Signature cancelled"
-        default:
-            return "Invalid envelope"
-        }
-    }
-}
+// TrustLevel extension is defined in Contact.swift
+// WhisperError extension is defined in WhisperService.swift

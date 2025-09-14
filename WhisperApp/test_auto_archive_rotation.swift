@@ -1,0 +1,76 @@
+#!/usr/bin/env swift
+
+import Foundation
+
+print("🧪 AUTO-ARCHIVE ON ROTATION - TEST PLAN")
+print("=======================================")
+
+print("\n📋 FEATURE OVERVIEW:")
+print("   - Auto-Archive on Rotation controls whether old identities are automatically")
+print("     archived (made decrypt-only) when a new identity is created via rotation")
+print("   - When ENABLED: Old identity becomes archived after rotation")
+print("   - When DISABLED: Old identity remains active alongside the new one")
+
+print("\n🔧 IMPLEMENTATION STATUS:")
+print("   ✅ Settings UI: Toggle in Settings > Message Security")
+print("   ✅ Settings Storage: UserDefaults with key 'whisper.policy.autoArchiveOnRotation'")
+print("   ✅ Policy Manager: autoArchiveOnRotation property implemented")
+print("   ✅ Identity Manager: Rotation logic updated to respect the setting")
+
+print("\n📱 TESTING STEPS:")
+print("   1. SETUP PHASE:")
+print("      - Open Whisper app on iPhone")
+print("      - Go to Settings > Identity Management")
+print("      - Ensure you have at least one identity created")
+print("      - Note the current identity name and status")
+
+print("\n   2. TEST AUTO-ARCHIVE ENABLED:")
+print("      a) Go to Settings > Message Security")
+print("      b) Turn ON 'Auto-Archive on Rotation' toggle")
+print("      c) Go back to Settings > Identity Management")
+print("      d) Tap 'Rotate Active Identity' on your current identity")
+print("      e) Confirm rotation")
+print("      f) EXPECTED RESULT:")
+print("         - New identity created with '(Rotated YYYY-MM-DD HH:MM:SS)' suffix")
+print("         - Old identity should show status 'Archived'")
+print("         - Only the new identity should be marked as 'Active'")
+
+print("\n   3. TEST AUTO-ARCHIVE DISABLED:")
+print("      a) Go to Settings > Message Security")
+print("      b) Turn OFF 'Auto-Archive on Rotation' toggle")
+print("      c) Go back to Settings > Identity Management")
+print("      d) Tap 'Rotate Active Identity' on your current active identity")
+print("      e) Confirm rotation")
+print("      f) EXPECTED RESULT:")
+print("         - New identity created with '(Rotated YYYY-MM-DD HH:MM:SS)' suffix")
+print("         - Old identity should remain with status 'Active'")
+print("         - Both identities should be marked as 'Active'")
+
+print("\n   4. VERIFY PERSISTENCE:")
+print("      a) Close and reopen the app")
+print("      b) Check Settings > Message Security")
+print("      c) EXPECTED: Toggle state should be preserved")
+print("      d) Check Settings > Identity Management")
+print("      e) EXPECTED: Identity statuses should be preserved")
+
+print("\n🔍 DEBUGGING:")
+print("   - Check Xcode console for debug messages:")
+print("     - '🔄 Auto-archiving old identity: [name]' (when enabled)")
+print("     - '🔄 Auto-archive disabled, keeping old identity active: [name]' (when disabled)")
+print("   - Verify UserDefaults key: 'whisper.policy.autoArchiveOnRotation'")
+
+print("\n⚠️  IMPORTANT NOTES:")
+print("   - Archived identities can still decrypt old messages")
+print("   - Archived identities cannot be used for new encryption")
+print("   - This is a security feature to limit exposure of old keys")
+print("   - Multiple active identities allow for gradual key migration")
+
+print("\n✅ SUCCESS CRITERIA:")
+print("   1. Toggle works correctly in Settings UI")
+print("   2. Setting persists across app restarts")
+print("   3. When enabled: Old identity becomes archived after rotation")
+print("   4. When disabled: Old identity remains active after rotation")
+print("   5. Debug messages appear in console")
+print("   6. No crashes or errors during rotation")
+
+print("\n🚀 Ready to test! Follow the steps above on your iPhone.")

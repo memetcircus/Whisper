@@ -20,8 +20,8 @@ protocol CryptoEngine {
     ///   - recipientPublic: Recipient's X25519 public key
     /// - Returns: Shared secret from ECDH
     /// - Throws: CryptoError if key agreement fails
-    func performKeyAgreement(ephemeralPrivate: Curve25519.KeyAgreement.PrivateKey, 
-                           recipientPublic: Data) throws -> SharedSecret
+    func performKeyAgreement(ephemeralPrivate: Curve25519.KeyAgreement.PrivateKey,
+                            recipientPublic: Data) throws -> SharedSecret
     
     /// Derives encryption key and nonce using HKDF-SHA256 with context binding
     /// - Parameters:
@@ -105,15 +105,11 @@ class CryptoKitEngine: CryptoEngine {
         let identity = Identity(
             id: UUID(),
             name: "Generated Identity",
-            x25519KeyPair: X25519KeyPair(
-                privateKey: x25519PrivateKey,
-                publicKey: x25519PublicKey
-            ),
-            ed25519KeyPair: Ed25519KeyPair(
-                privateKey: ed25519PrivateKey,
-                publicKey: ed25519PublicKey
-            ),
-            fingerprint: generateFingerprint(x25519PublicKey: x25519PublicKey, 
+            x25519KeyPair: X25519KeyPair(privateKey: x25519PrivateKey,
+                                       publicKey: x25519PublicKey),
+            ed25519KeyPair: Ed25519KeyPair(privateKey: ed25519PrivateKey,
+                                         publicKey: ed25519PublicKey),
+            fingerprint: generateFingerprint(x25519PublicKey: x25519PublicKey,
                                            ed25519PublicKey: ed25519PublicKey),
             createdAt: Date(),
             status: .active,
@@ -139,8 +135,8 @@ class CryptoKitEngine: CryptoEngine {
     
     // MARK: - Key Agreement and Derivation
     
-    func performKeyAgreement(ephemeralPrivate: Curve25519.KeyAgreement.PrivateKey, 
-                           recipientPublic: Data) throws -> SharedSecret {
+    func performKeyAgreement(ephemeralPrivate: Curve25519.KeyAgreement.PrivateKey,
+                            recipientPublic: Data) throws -> SharedSecret {
         do {
             let recipientPublicKey = try Curve25519.KeyAgreement.PublicKey(rawRepresentation: recipientPublic)
             return try ephemeralPrivate.sharedSecretFromKeyAgreement(with: recipientPublicKey)
@@ -152,23 +148,19 @@ class CryptoKitEngine: CryptoEngine {
     func deriveKeys(sharedSecret: SharedSecret, salt: Data, info: Data) throws -> (encKey: Data, nonce: Data) {
         // Derive encryption key using HKDF with "key" label
         let keyInfo = "key".data(using: .utf8)! + info
-        let encKey = sharedSecret.hkdfDerivedSymmetricKey(
-            using: SHA256.self,
-            salt: salt,
-            sharedInfo: keyInfo,
-            outputByteCount: 32
-        )
+        let encKey = sharedSecret.hkdfDerivedSymmetricKey(using: SHA256.self,
+                                                        salt: salt,
+                                                        sharedInfo: keyInfo,
+                                                        outputByteCount: 32)
         
         // Derive nonce using HKDF with "nonce" label
         let nonceInfo = "nonce".data(using: .utf8)! + info
-        let nonceKey = sharedSecret.hkdfDerivedSymmetricKey(
-            using: SHA256.self,
-            salt: salt,
-            sharedInfo: nonceInfo,
-            outputByteCount: 12
-        )
+        let nonceKey = sharedSecret.hkdfDerivedSymmetricKey(using: SHA256.self,
+                                                          salt: salt,
+                                                          sharedInfo: nonceInfo,
+                                                          outputByteCount: 12)
         
-        return (encKey.withUnsafeBytes { Data($0) }, 
+        return (encKey.withUnsafeBytes { Data($0) },
                 nonceKey.withUnsafeBytes { Data($0) })
     }
     
@@ -186,12 +178,10 @@ class CryptoKitEngine: CryptoEngine {
             let symmetricKey = SymmetricKey(data: key)
             let chachaNonce = try ChaChaPoly.Nonce(data: nonce)
             
-            let sealedBox = try ChaChaPoly.seal(
-                plaintext,
-                using: symmetricKey,
-                nonce: chachaNonce,
-                authenticating: aad
-            )
+            let sealedBox = try ChaChaPoly.seal(plaintext,
+                                              using: symmetricKey,
+                                              nonce: chachaNonce,
+                                              authenticating: aad)
             
             return sealedBox.combined
         } catch {
@@ -296,7 +286,7 @@ struct Ed25519KeyPair {
 }
 
 /// Represents a cryptographic identity with key pairs and metadata
-struct Identity: Identifiable {
+struct Identity: Identifiable, Hashable {
     let id: UUID
     let name: String
     let x25519KeyPair: X25519KeyPair
@@ -310,6 +300,26 @@ struct Identity: Identifiable {
     var shortFingerprint: String {
         let base32 = fingerprint.base32CrockfordEncoded()
         return String(base32.prefix(12))
+    }
+    
+    // MARK: - Hashable Conformance
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(name)
+        hasher.combine(fingerprint)
+        hasher.combine(createdAt)
+        hasher.combine(status)
+        hasher.combine(keyVersion)
+    }
+    
+    static func == (lhs: Identity, rhs: Identity) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.name == rhs.name &&
+               lhs.fingerprint == rhs.fingerprint &&
+               lhs.createdAt == rhs.createdAt &&
+               lhs.status == rhs.status &&
+               lhs.keyVersion == rhs.keyVersion
     }
 }
 

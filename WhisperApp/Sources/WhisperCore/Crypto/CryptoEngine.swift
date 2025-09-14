@@ -296,7 +296,7 @@ struct Ed25519KeyPair {
 }
 
 /// Represents a cryptographic identity with key pairs and metadata
-struct Identity: Identifiable {
+struct Identity: Identifiable, Hashable {
     let id: UUID
     let name: String
     let x25519KeyPair: X25519KeyPair
@@ -310,6 +310,14 @@ struct Identity: Identifiable {
     var shortFingerprint: String {
         let base32 = fingerprint.base32CrockfordEncoded()
         return String(base32.prefix(12))
+    }
+    
+    // MARK: - Hashable Conformance
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(name)
+        hasher.combine(fingerprint)
     }
 }
 

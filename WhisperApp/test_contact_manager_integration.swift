@@ -1,7 +1,7 @@
 #!/usr/bin/env swift
 
-import Foundation
 import CryptoKit
+import Foundation
 
 // MARK: - Contact Manager Integration Test
 
@@ -10,47 +10,47 @@ print("=== Contact Manager Integration Test ===")
 // Simple in-memory contact manager for testing
 class InMemoryContactManager {
     private var contacts: [UUID: MockContact] = [:]
-    
+
     func addContact(_ contact: MockContact) throws {
         guard contacts[contact.id] == nil else {
             throw ContactManagerError.contactAlreadyExists
         }
         contacts[contact.id] = contact
     }
-    
+
     func updateContact(_ contact: MockContact) throws {
         guard contacts[contact.id] != nil else {
             throw ContactManagerError.contactNotFound
         }
         contacts[contact.id] = contact
     }
-    
+
     func deleteContact(id: UUID) throws {
         guard contacts[id] != nil else {
             throw ContactManagerError.contactNotFound
         }
         contacts.removeValue(forKey: id)
     }
-    
+
     func getContact(id: UUID) -> MockContact? {
         return contacts[id]
     }
-    
+
     func getContact(byRkid rkid: Data) -> MockContact? {
         return contacts.values.first { $0.rkid == rkid }
     }
-    
+
     func listContacts() -> [MockContact] {
         return Array(contacts.values).sorted { $0.displayName < $1.displayName }
     }
-    
+
     func searchContacts(query: String) -> [MockContact] {
         return contacts.values.filter { contact in
-            contact.displayName.localizedCaseInsensitiveContains(query) ||
-            (contact.note?.localizedCaseInsensitiveContains(query) ?? false)
+            contact.displayName.localizedCaseInsensitiveContains(query)
+                || (contact.note?.localizedCaseInsensitiveContains(query) ?? false)
         }.sorted { $0.displayName < $1.displayName }
     }
-    
+
     func verifyContact(id: UUID, sasConfirmed: Bool) throws {
         guard var contact = contacts[id] else {
             throw ContactManagerError.contactNotFound
@@ -58,7 +58,7 @@ class InMemoryContactManager {
         contact.trustLevel = sasConfirmed ? .verified : .unverified
         contacts[id] = contact
     }
-    
+
     func blockContact(id: UUID) throws {
         guard var contact = contacts[id] else {
             throw ContactManagerError.contactNotFound
@@ -66,7 +66,7 @@ class InMemoryContactManager {
         contact.isBlocked = true
         contacts[id] = contact
     }
-    
+
     func unblockContact(id: UUID) throws {
         guard var contact = contacts[id] else {
             throw ContactManagerError.contactNotFound
@@ -74,7 +74,7 @@ class InMemoryContactManager {
         contact.isBlocked = false
         contacts[id] = contact
     }
-    
+
     func exportPublicKeybook() throws -> Data {
         let publicBundles = contacts.values.map { contact in
             PublicKeyBundle(from: contact)
@@ -83,10 +83,12 @@ class InMemoryContactManager {
         encoder.dateEncodingStrategy = .iso8601
         return try encoder.encode(publicBundles)
     }
-    
-    func handleKeyRotation(for contact: MockContact, newX25519Key: Data, newEd25519Key: Data? = nil) throws {
+
+    func handleKeyRotation(for contact: MockContact, newX25519Key: Data, newEd25519Key: Data? = nil)
+        throws
+    {
         var updatedContact = contact
-        
+
         // Add old key to history
         let oldKeyEntry = KeyHistoryEntry(
             keyVersion: contact.keyVersion,
@@ -94,21 +96,21 @@ class InMemoryContactManager {
             ed25519PublicKey: contact.ed25519PublicKey
         )
         updatedContact.keyHistory.append(oldKeyEntry)
-        
+
         // Update with new keys
         updatedContact.x25519PublicKey = newX25519Key
         updatedContact.ed25519PublicKey = newEd25519Key
         updatedContact.keyVersion += 1
-        updatedContact.trustLevel = .unverified // Reset trust on key rotation
-        
+        updatedContact.trustLevel = .unverified  // Reset trust on key rotation
+
         // Regenerate derived fields
         let hash = SHA256.hash(data: newX25519Key)
         updatedContact.fingerprint = Data(hash)
         updatedContact.rkid = Data(updatedContact.fingerprint.suffix(8))
-        
+
         contacts[contact.id] = updatedContact
     }
-    
+
     func checkForKeyRotation(contact: MockContact, currentX25519Key: Data) -> Bool {
         return contact.x25519PublicKey != currentX25519Key
     }
@@ -128,8 +130,11 @@ struct MockContact: Codable {
     let createdAt: Date
     var lastSeenAt: Date?
     var note: String?
-    
-    init(displayName: String, x25519PublicKey: Data, ed25519PublicKey: Data? = nil, note: String? = nil) {
+
+    init(
+        displayName: String, x25519PublicKey: Data, ed25519PublicKey: Data? = nil,
+        note: String? = nil
+    ) {
         self.id = UUID()
         self.displayName = displayName
         self.x25519PublicKey = x25519PublicKey
@@ -141,7 +146,7 @@ struct MockContact: Codable {
         self.keyHistory = []
         self.createdAt = Date()
         self.lastSeenAt = nil
-        
+
         // Generate derived fields
         let hash = SHA256.hash(data: x25519PublicKey)
         self.fingerprint = Data(hash)
@@ -154,7 +159,7 @@ struct KeyHistoryEntry: Codable {
     let x25519PublicKey: Data
     let ed25519PublicKey: Data?
     let createdAt: Date
-    
+
     init(keyVersion: Int, x25519PublicKey: Data, ed25519PublicKey: Data? = nil) {
         self.keyVersion = keyVersion
         self.x25519PublicKey = x25519PublicKey
@@ -170,7 +175,7 @@ struct PublicKeyBundle: Codable {
     let fingerprint: Data
     let keyVersion: Int
     let createdAt: Date
-    
+
     init(from contact: MockContact) {
         self.displayName = contact.displayName
         self.x25519PublicKey = contact.x25519PublicKey
@@ -244,7 +249,9 @@ if let retrievedByRkid = retrievedByRkid, retrievedByRkid.displayName == "Bob Jo
 
 print("\n3. Testing List Contacts...")
 let allContacts = manager.listContacts()
-if allContacts.count == 2 && allContacts[0].displayName == "Alice Smith" && allContacts[1].displayName == "Bob Johnson" {
+if allContacts.count == 2 && allContacts[0].displayName == "Alice Smith"
+    && allContacts[1].displayName == "Bob Johnson"
+{
     print("✓ Listed all contacts in alphabetical order")
 } else {
     print("❌ Failed to list contacts correctly")
@@ -315,10 +322,10 @@ if rotationDetected {
 try manager.handleKeyRotation(for: alice, newX25519Key: newKey)
 let rotatedAlice = manager.getContact(id: alice.id)
 if let rotatedAlice = rotatedAlice {
-    if rotatedAlice.x25519PublicKey == newKey &&
-       rotatedAlice.trustLevel == .unverified &&
-       rotatedAlice.keyHistory.count == 1 &&
-       rotatedAlice.keyHistory[0].x25519PublicKey == originalKey {
+    if rotatedAlice.x25519PublicKey == newKey && rotatedAlice.trustLevel == .unverified
+        && rotatedAlice.keyHistory.count == 1
+        && rotatedAlice.keyHistory[0].x25519PublicKey == originalKey
+    {
         print("✓ Key rotation handling works")
     } else {
         print("❌ Key rotation handling failed")
@@ -334,12 +341,12 @@ print("\n8. Testing Export...")
 let exportData = try manager.exportPublicKeybook()
 if !exportData.isEmpty {
     print("✓ Export keybook works")
-    
+
     // Test that export can be decoded
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
     let publicBundles = try decoder.decode([PublicKeyBundle].self, from: exportData)
-    
+
     if publicBundles.count == 2 {
         print("✓ Export contains correct number of contacts")
     } else {

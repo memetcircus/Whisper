@@ -149,10 +149,6 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/DefaultMessagePadding.swift"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/EnvelopeProcessor.swift"
         },
         {
@@ -170,34 +166,6 @@
         {
           "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/KeychainManager.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/BackgroundCryptoProcessor.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/CryptoBenchmarks.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/LazyLoadingService.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/MemoryOptimizedCrypto.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedContactManager.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedIdentityManager.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/PerformanceMonitor.swift"
         },
         {
           "kind" : "file",
@@ -240,19 +208,11 @@
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/SASWordList.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CoreDataReplayProtector.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoEngine.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultMessagePadding.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/EnvelopeProcessor.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MessagePadding.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultBiometricService.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/IdentityManager.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/KeychainManager.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BackgroundCryptoProcessor.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoBenchmarks.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/LazyLoadingService.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MemoryOptimizedCrypto.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedContactManager.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedIdentityManager.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PerformanceMonitor.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PolicyManager.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/QRCodeService.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/ReplayProtectionService.swift.o",
@@ -340,10 +300,6 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultMessagePadding.swift.o"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/EnvelopeProcessor.swift.o"
         },
         {
@@ -361,34 +317,6 @@
         {
           "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/KeychainManager.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BackgroundCryptoProcessor.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoBenchmarks.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/LazyLoadingService.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MemoryOptimizedCrypto.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedContactManager.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedIdentityManager.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PerformanceMonitor.swift.o"
         },
         {
           "kind" : "file",
@@ -425,19 +353,11 @@
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Contacts/SASWordList.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/CoreDataReplayProtector.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/CryptoEngine.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/DefaultMessagePadding.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/EnvelopeProcessor.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/MessagePadding.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/DefaultBiometricService.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Identity/IdentityManager.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/KeychainManager.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/BackgroundCryptoProcessor.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/CryptoBenchmarks.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/LazyLoadingService.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/MemoryOptimizedCrypto.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedContactManager.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedIdentityManager.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/PerformanceMonitor.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Policies/PolicyManager.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/QRCodeService.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/ReplayProtectionService.swift",
@@ -482,6 +402,18 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewModelQRTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewQRUITests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewQRUITestsValidation.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/EndToEndTests.swift"
         },
         {
@@ -503,6 +435,10 @@
         {
           "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/LocalizationTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ManualPasteFunctionalityTests.swift"
         },
         {
           "kind" : "file",
@@ -534,6 +470,14 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRIntegrationWorkflowTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRWorkflowEndToEndTests.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ReplayAndFreshnessTests.swift"
         },
         {
@@ -546,15 +490,11 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/CryptoEngineTests.swift"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/SettingsMigrationTests.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/EnvelopeProcessorTests.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/MessagePaddingTests.swift"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/Task4ManualPasteValidationTests.swift"
         },
         {
           "kind" : "file",
@@ -580,12 +520,16 @@
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/ContactManagerTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/CryptoEngineTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/CryptographicValidationTests.swift.o",
+        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewModelQRTests.swift.o",
+        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewQRUITests.swift.o",
+        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewQRUITestsValidation.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/EndToEndTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/EnvelopeProcessorTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/IdentityManagerTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/IntegrationTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/LegalDisclaimerTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/LocalizationTests.swift.o",
+        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/ManualPasteFunctionalityTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/MessagePaddingTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/NetworkDetectionTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/NetworkingDetectionTests.swift.o",
@@ -593,12 +537,13 @@
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/PolicyManagerTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/PolicyMatrixTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/QRCodeServiceTests.swift.o",
+        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/QRIntegrationWorkflowTests.swift.o",
+        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/QRWorkflowEndToEndTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/ReplayAndFreshnessTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/ReplayProtectionTests.swift.o",
         "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/SecurityTests.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/CryptoEngineTests.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/EnvelopeProcessorTests.swift.o",
-        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/MessagePaddingTests.swift.o"
+        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/SettingsMigrationTests.swift.o",
+        "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/Task4ManualPasteValidationTests.swift.o"
       ],
       "otherArguments" : [
         "-target",
@@ -674,6 +619,18 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewModelQRTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewQRUITests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewQRUITestsValidation.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/EndToEndTests.swift.o"
         },
         {
@@ -695,6 +652,10 @@
         {
           "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/LocalizationTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/ManualPasteFunctionalityTests.swift.o"
         },
         {
           "kind" : "file",
@@ -726,6 +687,14 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/QRIntegrationWorkflowTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/QRWorkflowEndToEndTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/ReplayAndFreshnessTests.swift.o"
         },
         {
@@ -738,15 +707,11 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/CryptoEngineTests.swift.o"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/SettingsMigrationTests.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/EnvelopeProcessorTests.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/MessagePaddingTests.swift.o"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/Task4ManualPasteValidationTests.swift.o"
         },
         {
           "kind" : "file",
@@ -762,12 +727,16 @@
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ContactManagerTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/CryptoEngineTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/CryptographicValidationTests.swift",
+        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewModelQRTests.swift",
+        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewQRUITests.swift",
+        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewQRUITestsValidation.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/EndToEndTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/EnvelopeProcessorTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/IdentityManagerTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/IntegrationTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/LegalDisclaimerTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/LocalizationTests.swift",
+        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ManualPasteFunctionalityTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/MessagePaddingTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/NetworkDetectionTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/NetworkingDetectionTests.swift",
@@ -775,12 +744,13 @@
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/PolicyManagerTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/PolicyMatrixTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRCodeServiceTests.swift",
+        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRIntegrationWorkflowTests.swift",
+        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRWorkflowEndToEndTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ReplayAndFreshnessTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ReplayProtectionTests.swift",
         "/Users/akif/Desktop/Whisper/WhisperApp/Tests/SecurityTests.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/CryptoEngineTests.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/EnvelopeProcessorTests.swift",
-        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/MessagePaddingTests.swift"
+        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/SettingsMigrationTests.swift",
+        "/Users/akif/Desktop/Whisper/WhisperApp/Tests/Task4ManualPasteValidationTests.swift"
       ],
       "tempsPath" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build",
       "wholeModuleOptimization" : false
@@ -861,19 +831,11 @@
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Contacts/SASWordList.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/CoreDataReplayProtector.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/CryptoEngine.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/DefaultMessagePadding.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/EnvelopeProcessor.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/MessagePadding.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/DefaultBiometricService.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Identity/IdentityManager.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/KeychainManager.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/BackgroundCryptoProcessor.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/CryptoBenchmarks.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/LazyLoadingService.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/MemoryOptimizedCrypto.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedContactManager.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedIdentityManager.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/PerformanceMonitor.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Policies/PolicyManager.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/QRCodeService.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/ReplayProtectionService.swift",
@@ -942,12 +904,16 @@
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ContactManagerTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/CryptoEngineTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/CryptographicValidationTests.swift",
+      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewModelQRTests.swift",
+      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewQRUITests.swift",
+      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewQRUITestsValidation.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/EndToEndTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/EnvelopeProcessorTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/IdentityManagerTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/IntegrationTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/LegalDisclaimerTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/LocalizationTests.swift",
+      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ManualPasteFunctionalityTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/MessagePaddingTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/NetworkDetectionTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/NetworkingDetectionTests.swift",
@@ -955,12 +921,13 @@
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/PolicyManagerTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/PolicyMatrixTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRCodeServiceTests.swift",
+      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRIntegrationWorkflowTests.swift",
+      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRWorkflowEndToEndTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ReplayAndFreshnessTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ReplayProtectionTests.swift",
       "/Users/akif/Desktop/Whisper/WhisperApp/Tests/SecurityTests.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/CryptoEngineTests.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/EnvelopeProcessorTests.swift",
-      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/MessagePaddingTests.swift",
+      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/SettingsMigrationTests.swift",
+      "/Users/akif/Desktop/Whisper/WhisperApp/Tests/Task4ManualPasteValidationTests.swift",
       "-I",
       "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/Modules",
       "-target",
@@ -1077,10 +1044,6 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/BackgroundCryptoProcessor.swift.o"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/Base32Crockford.swift.o"
         },
         {
@@ -1105,19 +1068,11 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoBenchmarks.swift.o"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/CryptoEngine.swift.o"
         },
         {
           "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultBiometricService.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/DefaultMessagePadding.swift.o"
         },
         {
           "kind" : "file",
@@ -1133,27 +1088,7 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/LazyLoadingService.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MemoryOptimizedCrypto.swift.o"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/MessagePadding.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedContactManager.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/OptimizedIdentityManager.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCore.build/PerformanceMonitor.swift.o"
         },
         {
           "kind" : "file",
@@ -1205,19 +1140,23 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/CryptoEngineTests.swift.o"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/CryptographicValidationTests.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/EndToEndTests.swift.o"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewModelQRTests.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/EnvelopeProcessorTests.swift.o"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewQRUITests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/DecryptViewQRUITestsValidation.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/EndToEndTests.swift.o"
         },
         {
           "kind" : "file",
@@ -1241,7 +1180,7 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/MessagePaddingTests.swift.o"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/ManualPasteFunctionalityTests.swift.o"
         },
         {
           "kind" : "file",
@@ -1273,6 +1212,14 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/QRIntegrationWorkflowTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/QRWorkflowEndToEndTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/ReplayAndFreshnessTests.swift.o"
         },
         {
@@ -1282,6 +1229,14 @@
         {
           "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/SecurityTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/SettingsMigrationTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/Task4ManualPasteValidationTests.swift.o"
         }
       ],
       "outputFilePath" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperAppPackageTests.product/Objects.LinkFileList"
@@ -1327,10 +1282,6 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/DefaultMessagePadding.swift"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Crypto/EnvelopeProcessor.swift"
         },
         {
@@ -1348,34 +1299,6 @@
         {
           "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/KeychainManager.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/BackgroundCryptoProcessor.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/CryptoBenchmarks.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/LazyLoadingService.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/MemoryOptimizedCrypto.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedContactManager.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/OptimizedIdentityManager.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Sources/WhisperCore/Performance/PerformanceMonitor.swift"
         },
         {
           "kind" : "file",
@@ -1437,6 +1360,18 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewModelQRTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewQRUITests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/DecryptViewQRUITestsValidation.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/EndToEndTests.swift"
         },
         {
@@ -1458,6 +1393,10 @@
         {
           "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/LocalizationTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ManualPasteFunctionalityTests.swift"
         },
         {
           "kind" : "file",
@@ -1489,6 +1428,14 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRIntegrationWorkflowTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/QRWorkflowEndToEndTests.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/ReplayAndFreshnessTests.swift"
         },
         {
@@ -1501,15 +1448,11 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/CryptoEngineTests.swift"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/SettingsMigrationTests.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/EnvelopeProcessorTests.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/WhisperCoreTests/MessagePaddingTests.swift"
+          "name" : "/Users/akif/Desktop/Whisper/WhisperApp/Tests/Task4ManualPasteValidationTests.swift"
         }
       ],
       "outputFilePath" : "/Users/akif/Desktop/Whisper/WhisperApp/.build/x86_64-apple-macosx/debug/WhisperCoreTests.build/sources"

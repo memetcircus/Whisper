@@ -72,7 +72,7 @@
 "contact.never_seen" = "Never seen";
 
 // MARK: - Identity Management
-"identity.active" = "Active Identity";
+"identity.active" = "Default Identity";
 "identity.archived" = "Archived";
 "identity.create.title" = "Create Identity";
 "identity.create.name.placeholder" = "Identity name";
@@ -80,12 +80,18 @@
 "identity.archive.title" = "Archive Identity";
 "identity.archive.message" = "Are you sure you want to archive this identity? It will become decrypt-only.";
 "identity.rotate.title" = "Rotate Keys";
-"identity.rotate.message" = "This will create a new identity and optionally archive the current one";
+"identity.rotate.message" = "This will create a new identity with fresh keys and archive the current one for security. The old identity will remain available for decrypting past messages.";
 "identity.export.title" = "Export Identity";
 "identity.import.title" = "Import Identity";
 "identity.backup.title" = "Backup Identity";
 "identity.restore.title" = "Restore Identity";
 "identity.expiration.warning" = "Your identity will expire soon. Consider rotating your keys.";
+
+// MARK: - Key Rotation Security
+"contact.keyRotation.warning" = "This contact has rotated their keys and needs re-verification for secure communication.";
+"contact.keyRotation.title" = "Key Rotation Detected";
+"contact.keyRotation.action" = "Re-verify Contact";
+"contact.keyRotation.explanation" = "For security, you must re-verify this contact's new keys before sending encrypted messages.";
 
 // MARK: - Encryption/Compose
 "encrypt.title" = "Compose Message";
@@ -104,7 +110,7 @@
 "encrypt.copy" = "Copy";
 "encrypt.success.title" = "Message Encrypted";
 "encrypt.success.message" = "Your message has been encrypted successfully";
-"encrypt.error.no_identity" = "No active identity selected";
+"encrypt.error.no_identity" = "No default identity selected";
 "encrypt.error.no_recipient" = "No recipient selected";
 "encrypt.error.empty_message" = "Message cannot be empty";
 
@@ -179,7 +185,7 @@
 "accessibility.trust_badge.revoked" = "Revoked contact - identity compromised";
 "accessibility.trust_badge.blocked" = "Blocked contact - messages disabled";
 "accessibility.contact_avatar" = "Contact avatar for %@";
-"accessibility.identity_selector" = "Select active identity";
+"accessibility.identity_selector" = "Select default identity";
 "accessibility.contact_selector" = "Select message recipient";
 "accessibility.encrypt_button" = "Encrypt message with current settings";
 "accessibility.decrypt_button" = "Decrypt the entered message";

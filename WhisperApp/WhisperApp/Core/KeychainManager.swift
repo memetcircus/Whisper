@@ -36,10 +36,17 @@ class KeychainManager {
     /// Requires Face ID/Touch ID for access
     private static let biometricAccessControl: SecAccessControl = {
         var error: Unmanaged<CFError>?
+        let flags: SecAccessControlCreateFlags
+        if #available(iOS 11.3, *) {
+            flags = [.biometryAny, .privateKeyUsage]
+        } else {
+            flags = [.touchIDAny, .privateKeyUsage]
+        }
+        
         let accessControl = SecAccessControlCreateWithFlags(
             kCFAllocatorDefault,
             kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-            [.biometryCurrentSet, .privateKeyUsage],
+            flags,
             &error
         )
         
@@ -225,7 +232,8 @@ class KeychainManager {
         let context = LAContext()
         var error: NSError?
         
-        return context.canEvaluatePolicy(.biometryCurrentSet, error: &error)
+        // Use .deviceOwnerAuthenticationWithBiometrics which is available on all iOS versions
+        return context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
     }
     
     /// Gets the type of biometric authentication available
@@ -234,7 +242,7 @@ class KeychainManager {
         let context = LAContext()
         var error: NSError?
         
-        guard context.canEvaluatePolicy(.biometryCurrentSet, error: &error) else {
+        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
             return .none
         }
         

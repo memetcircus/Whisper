@@ -24,6 +24,10 @@
 	<string>Whisper uses Face ID to protect your signing keys and ensure only you can sign messages.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Whisper uses the camera to scan QR codes for adding contacts and importing encrypted messages.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Whisper needs access to your photo library to save QR codes for easy sharing of encrypted messages and contact information.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Whisper needs access to save QR codes to your photo library for easy sharing of encrypted messages and contact information.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -60,5 +64,7 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
 </dict>
 </plist>

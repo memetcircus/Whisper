@@ -131,7 +131,7 @@ enum TrustLevel: String, CaseIterable {
 
 // MARK: - Key History Entry
 
-struct KeyHistoryEntry {
+struct KeyHistoryEntry: Equatable {
     let id: UUID
     let keyVersion: Int
     let x25519PublicKey: Data
