@@ -138,8 +138,8 @@ struct AddContactQRScannerView: View {
                 }
             )
         }
-        .onChange(of: selectedPhoto) { newPhoto in
-            if let newPhoto = newPhoto {
+        .task(id: selectedPhoto) {
+            if let newPhoto = selectedPhoto {
                 processSelectedPhoto(newPhoto)
             }
         }
