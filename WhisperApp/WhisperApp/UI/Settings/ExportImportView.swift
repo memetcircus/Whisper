@@ -42,6 +42,7 @@ struct ExportImportView: View {
     @State private var showingContactImport = false
     @State private var showingIdentityExport = false
     @State private var showingPublicKeyImport = false
+    @State private var showingDocumentPicker = false
 
     var body: some View {
         List {
@@ -98,7 +99,22 @@ struct ExportImportView: View {
                         .disabled(viewModel.contacts.isEmpty)
                         
                         Button(action: {
+                            print("🔍 UI DEBUG: Import Contacts button tapped")
+                            print("🔍 UI DEBUG: Current showingContactImport value: \(showingContactImport)")
+                            
+                            // Try the fileImporter first
                             showingContactImport = true
+                            print("🔍 UI DEBUG: showingContactImport set to true")
+                            
+                            // Add a small delay and then try DocumentPicker as fallback
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                print("🔍 UI DEBUG: After delay - showingContactImport is: \(showingContactImport)")
+                                if showingContactImport {
+                                    print("🔍 UI DEBUG: fileImporter didn't trigger, trying DocumentPicker fallback")
+                                    showingContactImport = false
+                                    showingDocumentPicker = true
+                                }
+                            }
                         }) {
                             HStack {
                                 Image(systemName: "square.and.arrow.down.fill")
@@ -246,9 +262,11 @@ struct ExportImportView: View {
         }
         .fileImporter(
             isPresented: $showingContactImport,
-            allowedContentTypes: [.json],
+            allowedContentTypes: [.json, .plainText, .data, UTType(filenameExtension: "json") ?? .data],
             allowsMultipleSelection: false
         ) { result in
+            print("🔍 UI DEBUG: Contact fileImporter callback triggered")
+            print("🔍 UI DEBUG: Result type: \(type(of: result))")
             viewModel.handleContactImport(result: result)
         }
         .fileImporter(
@@ -258,8 +276,23 @@ struct ExportImportView: View {
         ) { result in
             viewModel.handlePublicKeyBundleImport(result: result)
         }
+        // ✅ Fallback sheet for UIKit document picker (previously missing)
+        .sheet(isPresented: $showingDocumentPicker) {
+            DocumentPicker(
+                allowedContentTypes: [.json, .plainText, .data],
+                onDocumentPicked: { result in
+                    viewModel.handleContactImport(result: result)
+                }
+            )
+        }
         .onAppear {
             viewModel.loadDataAndClearMessages()
+        }
+        .onChange(of: showingContactImport) { newValue in
+            print("🔍 UI DEBUG: showingContactImport changed to: \(newValue)")
+        }
+        .onChange(of: showingPublicKeyImport) { newValue in
+            print("🔍 UI DEBUG: showingPublicKeyImport changed to: \(newValue)")
         }
         .sheet(isPresented: $viewModel.showingShareSheet) {
             if let shareURL = viewModel.shareURL {
@@ -427,8 +460,52 @@ struct EnhancedIdentityExportSheet: View {
     }
 }
 
+// MARK: - DocumentPicker for iOS File Access
+import UIKit
+
+struct DocumentPicker: UIViewControllerRepresentable {
+    let allowedContentTypes: [UTType]
+    let onDocumentPicked: (Result<[URL], Error>) -> Void
+    
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        print("🔍 DOCUMENT PICKER DEBUG: Creating UIDocumentPickerViewController")
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: allowedContentTypes)
+        picker.delegate = context.coordinator
+        picker.allowsMultipleSelection = false
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {
+        // No updates needed
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UIDocumentPickerDelegate {
+        let parent: DocumentPicker
+        
+        init(_ parent: DocumentPicker) {
+            self.parent = parent
+        }
+        
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            print("🔍 DOCUMENT PICKER DEBUG: Documents picked: \(urls)")
+            parent.onDocumentPicked(.success(urls))
+        }
+        
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            print("🔍 DOCUMENT PICKER DEBUG: Document picker was cancelled")
+            let error = NSError(domain: "DocumentPickerError", code: 1, userInfo: [NSLocalizedDescriptionKey: "User cancelled"])
+            parent.onDocumentPicked(.failure(error))
+        }
+    }
+}
+
 #Preview {
     NavigationView {
         ExportImportView()
     }
 }
+
