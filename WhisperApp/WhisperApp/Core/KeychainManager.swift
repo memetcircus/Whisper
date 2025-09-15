@@ -167,37 +167,39 @@ class KeychainManager {
     /// - Parameter identifier: Unique identifier for the key
     /// - Returns: The Ed25519 private key
     /// - Throws: KeychainError if retrieval fails
-    static func retrieveEd25519PrivateKey(identifier: String) throws -> Curve25519.Signing.PrivateKey {
-        let query: [String: Any] = [
+  static func retrieveEd25519PrivateKey(identifier: String) throws -> Curve25519.Signing.PrivateKey {
+       
+        let context = LAContext()
+        context.localizedReason = "Authenticate to access signing key"
+
+        var query: [String: Any] = [
             kSecClass as String: kSecClassKey,
             kSecAttrApplicationTag as String: "ed25519-\(identifier)".data(using: .utf8)!,
             kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecUseOperationPrompt as String: "Authenticate to access signing key"
+            kSecMatchLimit as String: kSecMatchLimitOne
         ]
-        
+     
+        query[kSecUseAuthenticationContext as String] = context
+
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
-        
+
         guard status == errSecSuccess else {
             if status == errSecUserCancel {
                 throw KeychainError.userCancelled
             }
             throw KeychainError.retrievalFailure(status)
         }
-        
+
         guard let keyData = result as? Data else {
             throw KeychainError.invalidKeyData
         }
-        
+
         do {
             let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: keyData)
-            
-            // Securely clear the key data from memory
             keyData.withUnsafeBytes { bytes in
                 memset_s(UnsafeMutableRawPointer(mutating: bytes.baseAddress), bytes.count, 0, bytes.count)
             }
-            
             return privateKey
         } catch {
             throw KeychainError.keyCreationFailure(error)
