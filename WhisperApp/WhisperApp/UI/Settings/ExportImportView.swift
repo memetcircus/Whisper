@@ -288,11 +288,11 @@ struct ExportImportView: View {
         .onAppear {
             viewModel.loadDataAndClearMessages()
         }
-        .onChange(of: showingContactImport) { newValue in
-            print("🔍 UI DEBUG: showingContactImport changed to: \(newValue)")
+        .task(id: showingContactImport) {
+            print("🔍 UI DEBUG: showingContactImport changed to: \(showingContactImport)")
         }
-        .onChange(of: showingPublicKeyImport) { newValue in
-            print("🔍 UI DEBUG: showingPublicKeyImport changed to: \(newValue)")
+        .task(id: showingPublicKeyImport) {
+            print("🔍 UI DEBUG: showingPublicKeyImport changed to: \(showingPublicKeyImport)")
         }
         .sheet(isPresented: $viewModel.showingShareSheet) {
             if let shareURL = viewModel.shareURL {
