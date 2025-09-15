@@ -130,10 +130,17 @@ struct BiometricSettingsView: View {
                             
                             Spacer()
                             
-                            Toggle("", isOn: $viewModel.biometricSigningEnabled)
-                                .onChange(of: viewModel.biometricSigningEnabled) { _ in
-                                    viewModel.toggleBiometricSigning()
-                                }
+                            if #available(iOS 17.0, *) {
+    Toggle("", isOn: $viewModel.biometricSigningEnabled)
+        .onChange(of: viewModel.biometricSigningEnabled) { _, _ in
+            viewModel.toggleBiometricSigning()
+        }
+} else {
+    Toggle("", isOn: $viewModel.biometricSigningEnabled)
+        .onChange(of: viewModel.biometricSigningEnabled) { _ in
+            viewModel.toggleBiometricSigning()
+        }
+}
                         }
                     }
                     .padding(.vertical, 8)
