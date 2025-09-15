@@ -299,8 +299,8 @@ struct DecryptView: View {
                     .frame(minHeight: 200)
                     .background(Color.clear)
                     .focused($isInputFieldFocused)
-                    .onChange(of: viewModel.inputText) { _ in
-                        viewModel.validateInput()
+                    .task(id: viewModel.inputText) {
+                      viewModel.validateInput()
                     }
                     .disabled(viewModel.decryptionResult != nil)
                     .accessibilityLabel("Encrypted message input")
