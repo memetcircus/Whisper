@@ -333,8 +333,8 @@ struct FingerprintVerificationView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .font(.system(.caption, design: .monospaced))
                         .lineLimit(1...4)
-                        .onChange(of: receivedFingerprint) { _ in
-                            checkFingerprintMatch()
+                        .task(id: receivedFingerprint) {
+                           checkFingerprintMatch()
                         }
 
                         HStack {
